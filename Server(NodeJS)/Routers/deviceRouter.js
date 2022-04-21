@@ -5,5 +5,8 @@ const router = new Router()
 router.post('/',deviceController.create)
 router.get('/',deviceController.getAll)
 router.get('/:id',deviceController.getOne)
+router.delete('/:id',deviceController.delete)
+router.post('/:id',deviceController.update)
+
 
 module.exports = router;

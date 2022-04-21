@@ -9,13 +9,7 @@ const User = sequelize.define('user',
         primaryKey: true,
         autoIncrement:true
     },
-
-    login:
-    {
-        type: DataTypes.STRING,
-        unique: true
-    },
-
+    
     email:
     {
         type: DataTypes.STRING,

@@ -10,22 +10,79 @@ class DeviceController
         try
         {
             const {name,price,brandId,typeId,info} = request.body;
-            const {image} = request.files;
+            const {img} = request.files;
 
             let fileName = uuid.v4() + `.jpg`;
-            image.mv(path.resolve(__dirname,'..','Static',fileName));
+            img.mv(path.resolve(__dirname,'..','Static',fileName));
             const device = await Device.create({name,price,brandId,typeId,image: fileName});
 
 
             if(info)
             {
-                info = JSON.parse(info);
-                info.forEach(i =>
+                const infos= JSON.parse(info);
+                infos.forEach(i =>
                     DeviceInfo.create(
                         {
                             title: i.title,
-                            decription: i.decription,
+                            description: i.description,
                             deviceId: device.id
+                        }
+                    ))
+            }
+            
+            return response.json(device);
+        }
+        catch(error)
+        {
+            next(ApiError.badRequest(error.message));
+        }
+    }
+
+    async update(request,response,next)
+    {
+        try
+        {
+            const {name,price,brandId,typeId,info} = request.body;
+            const {id} = request.params;
+
+            const device = await Device.update({name,price,brandId,typeId}, 
+                {
+                    where: 
+                    {
+                        id: id
+                    }
+                }
+                );
+
+
+            if(info)
+            {
+                const infos= JSON.parse(info);
+                if(infos.length == 0)
+                {
+                    DeviceInfo.destroy(
+
+                        {
+                            where:
+                            {
+                                deviceId: id
+                            }
+                        }
+                    );
+                }
+                infos.forEach(i =>
+                    DeviceInfo.update(
+                        {
+                            title: i.title,
+                            description: i.description,
+                            
+                        }
+                        ,
+                        {
+                            where:
+                            {
+                                deviceId: id
+                            }
                         }
                     ))
             }
@@ -40,7 +97,7 @@ class DeviceController
 
     async getAll(request,response)
     {
-        let {brandId,typeId,limit,page} = request.body;
+        let {brandId,typeId,limit,page} = request.query;
 
         page = page || 1;
         limit = limit || 9;
@@ -74,6 +131,18 @@ class DeviceController
             {
                 where:{id},
                 include : [{model: DeviceInfo,as: 'info'}]
+            }
+        )
+        
+        return response.json(device);
+    }
+
+    async delete(request,response)
+    {
+        const {id} = request.params;
+        const device = await Device.destroy(
+            {
+                where:{id}
             }
         )
         

@@ -10,12 +10,49 @@ class TypeController
         return response.json(type);
     }
 
-    async getAll(request,response)
+    async getAllList(request,response)
     {
-        const types = await Type.findAll();
+        let {limit,page} = request.query;
+
+        page = page || 1;
+        limit = limit || 9;
+        let offset = page * limit - limit;
+        let types;
+
+        types  = await Type.findAndCountAll({limit,offset});
         return response.json(types);
     }
 
+    async getAll(request,response)
+    {
+        const types  = await Type.findAll();
+        return response.json(types);
+    }
+
+    async delete(request,response)
+    {
+        const {id} = request.params;
+        const type = await Type.destroy(
+            {
+                where:{id}
+            }
+        )
+        
+        return response.json(type);
+    }
+
+    async getOne(request,response)
+    {
+        const {id} = request.params;
+        const type = await Type.findOne(
+            {
+                where:{id}
+            }
+        )
+        
+        return response.json(type);
+    }
 }
+
 
 module.exports = new TypeController();
