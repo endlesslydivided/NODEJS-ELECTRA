@@ -3,6 +3,9 @@ import {Button, Container} from "react-bootstrap";
 import DeviceTable from '../components/adminTables/DeviceTable';
 import BrandTable from '../components/adminTables/BrandTable';
 import TypeTable from '../components/adminTables/TypeTable';
+import RatingTable from '../components/adminTables/RatingTable';
+import BasketDeviceTable from '../components/adminTables/BasketDeviceTable';
+
 import './css/common.css' 
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
@@ -11,10 +14,10 @@ import {observer} from "mobx-react-lite";
 const AdminPanel = observer(() => {
 
   return (
-    <Container className="d-flex flex-column mt-3 w-100 " >
-      <Tabs defaultActiveKey="deviceTable" className="mt-3 rounded-0"    id="uncontrolled-tab-example">
-        <Tab eventKey="deviceTable" className="rounded-0"  title="DeviceTable">
-          <DeviceTable />
+    <Container className="d-flex flex-column mt-3 w-100">
+      <Tabs defaultActiveKey="deviceTable" className="mt-3 rounded-0 "    id="uncontrolled-tab-example">
+        <Tab eventKey="deviceTable" className="rounded-0 "  title="DeviceTable">
+          <DeviceTable  />
         </Tab>
         <Tab eventKey="brandsTable" className="rounded-0" title="BrandTable">
           <BrandTable /> 
@@ -22,8 +25,11 @@ const AdminPanel = observer(() => {
         <Tab eventKey="typesTable" className="rounded-0" title="TypesTable">
           <TypeTable />
         </Tab> 
-        <Tab eventKey="typeBrandsTable" title="TypeBrandsTable">
-          {/* <DeviceTable /> */}
+        <Tab eventKey="ratingTable" title="RatingTable">
+          <RatingTable/>
+        </Tab> 
+        <Tab eventKey="basketDeviceTable" title="BasketDeviceTable">
+          <BasketDeviceTable/>
         </Tab> 
 
     </Tabs>

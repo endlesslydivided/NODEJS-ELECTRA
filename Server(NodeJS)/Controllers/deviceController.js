@@ -95,7 +95,7 @@ class DeviceController
         }
     }
 
-    async getAll(request,response)
+    async getAllList(request,response)
     {
         let {brandId,typeId,limit,page} = request.query;
 

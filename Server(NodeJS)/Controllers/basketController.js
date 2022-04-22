@@ -16,6 +16,21 @@ class BasketController
         return response.json(baskets);
     }
 
+    async getAllList(request,response)
+    {
+        
+        let {limit,page} = request.query;
+
+        page = page || 1;
+        limit = limit || 9;
+        let offset = page * limit - limit;
+        let baskets;
+
+        baskets  = await Basket.findAndCountAll({limit,offset});
+        return response.json(baskets);
+        
+    }
+
     async getOne(request,response)
     {
         const {id} = request.params;
@@ -27,6 +42,8 @@ class BasketController
         
         return response.json(basket);
     }
+
+    
 }
 
 module.exports = new BasketController();

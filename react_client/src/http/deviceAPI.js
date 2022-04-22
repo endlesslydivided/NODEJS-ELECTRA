@@ -65,6 +65,7 @@ export const fetchOneBrand = async (id) => {
 /* #endregion */
 
 /* #region  DeviceMethods */
+
 export const createDevice = async (device) => {
     const { data } = await $authHost.post('api/device', device)
     return data
@@ -91,6 +92,70 @@ export const fetchOneDevice = async (id) => {
 
 export const deleteDevice = async (id) => {
     const { data } = await $authHost.delete('api/device/' + id)
+    return data
+}
+/* #endregion */
+
+/* #region  RatingMethods */
+
+export const createRating = async (device) => {
+    const { data } = await $authHost.post('api/rating', device)
+    return data
+}
+
+export const fetchRatings = async (page, limit = 9) => {
+    const { data } = await $host.get('api/rating', {
+        params: {
+            page, limit
+        }
+    })
+    return data
+}
+
+export const updateOneRating = async (rating,id) => {
+    const { data } = await $authHost.post('api/rating/' + id,rating)
+    return data
+}
+
+export const fetchOneRating = async (id) => {
+    const { data } = await $host.get('api/rating/' + id)
+    return data
+}
+
+export const deleteRating = async (id) => {
+    const { data } = await $authHost.delete('api/rating/' + id)
+    return data
+}
+/* #endregion */
+
+/* #region  BasketDeviceMethods */
+
+export const createBasketDevice = async (basketdevice) => {
+    const { data } = await $authHost.post('api/basketdevice', basketdevice)
+    return data
+}
+
+export const fetchBasketDevices = async (page, limit = 9) => {
+    const { data } = await $host.get('api/basketdevice', {
+        params: {
+            page, limit
+        }
+    })
+    return data
+}
+
+export const updateOneBasketDevice = async (basketdevice,id) => {
+    const { data } = await $authHost.post('api/basketdevice/' + id,basketdevice)
+    return data
+}
+
+export const fetchOneBasketDevice = async (id) => {
+    const { data } = await $host.get('api/basketdevice/' + id)
+    return data
+}
+
+export const deleteBasketDevice = async (id) => {
+    const { data } = await $authHost.delete('api/basketdevice/' + id)
     return data
 }
 /* #endregion */

@@ -51,6 +51,21 @@ class UserController {
         const token = generateJwt(req.user.id, req.user.email, req.user.role)
         return res.json({token})
     }
+
+    async getAllList(request,response)
+    {
+        
+        let {limit,page} = request.query;
+
+        page = page || 1;
+        limit = limit || 9;
+        let offset = page * limit - limit;
+        let users;
+
+        users  = await User.findAndCountAll({limit,offset});
+        return response.json(users);
+        
+    }
 }
 
 module.exports = new UserController()

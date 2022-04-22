@@ -4,8 +4,9 @@ const router = new Router();
 
 
 router.post('/',basketController.create)
-router.get('/',basketController.getAll)
+router.get('/all',basketController.getAll)
 router.get('/:id',basketController.getOne)
+router.get('/',basketController.getAllList)
 
 
 module.exports = router;

@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 import {Pagination} from "@mui/material";
+import {Grid} from "@mui/material";
 
 const Pages =observer( (props) => {
     const pageCount = Math.ceil(props.totalCount / props.limit)
@@ -14,15 +15,15 @@ const Pages =observer( (props) => {
    
 
     return (
-        <Pagination className="w-100" 
-        showFirstButton showLastButton
-        variant="outlined"
-        count={pages.length}
-        onChange={props.updateData}
-        
-        >
-            
-        </Pagination>
+
+            <Pagination className="w-100"
+
+            showFirstButton showLastButton
+            variant="outlined"
+            count={pages.length}
+            onChange={props.updateData}          
+            >
+            </Pagination>
     );
 })
 

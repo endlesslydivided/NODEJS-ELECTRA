@@ -46,7 +46,7 @@ const TypeTable = observer(() =>
 
         return ( 
         <Container>      
-        <Table striped bordered hover responsive>
+        <Table striped bordered hover responsive className={"table-light shadow"}>
             <thead>
                 <tr>
                     <th>Id</th>

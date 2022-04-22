@@ -5,7 +5,8 @@ const router = new Router();
 
 router.post('/',basketDeviceController.create)
 router.delete('/',basketDeviceController.delete)
-router.get('/',basketDeviceController.getAll)
+router.get('/all',basketDeviceController.getAll)
+router.get('/',basketDeviceController.getAllList)
 router.get('/:id',basketDeviceController.getOne)
 
 

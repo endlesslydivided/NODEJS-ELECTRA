@@ -54,8 +54,8 @@ const DeviceTable = observer(() =>
         }
 
         return ( 
-        <Container>      
-        <Table striped bordered hover responsive>
+        <Container >      
+        <Table striped bordered hover responsive className={"table-light shadow"}>
             <thead>
                 <tr>
                     <th>Id</th>
@@ -130,7 +130,6 @@ const DeviceTable = observer(() =>
                     totalCount={device.totalCount}
                     limit={device.limit}
                     pageO={device.page}
-                    
                     updateData ={(value) => device.setPage(value)}
                 />
 

@@ -16,6 +16,21 @@ class BasketDeviceController
         return response.json(basketDevices);
     }
 
+    async getAllList(request,response)
+    {
+        
+        let {limit,page} = request.query;
+
+        page = page || 1;
+        limit = limit || 9;
+        let offset = page * limit - limit;
+        let basketDevices;
+
+        basketDevices  = await BasketDevice.findAndCountAll({limit,offset});
+        return response.json(basketDevices);
+        
+    }
+
     async getOne(request,response)
     {
         const {id} = request.params;
