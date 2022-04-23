@@ -60,7 +60,7 @@ const TypeTable = observer(() =>
             {type !== undefined ?
                 
                 type.types.map((type) =>
-                    (<tr>
+                    (<tr key={type.id}>
                         <td>{type.id}</td>
                         <td>{type.name}</td>
                         <td>{type.createdAt}</td>

@@ -22,6 +22,7 @@ const NavBar = observer(() =>
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
+                
                 <NavLink style={{color:'white',textDecoration:'none'}} to={SHOP_ROUTE}>ELECTRA</NavLink>
                 {
                     user.isAuth ?

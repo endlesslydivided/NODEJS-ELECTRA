@@ -9,17 +9,20 @@ import Shop from "../pages/Shop";
 const AppRouter = observer(() => {
 
   const {user} = useContext(Context);
-  console.log(user);
   return (
     <Routes>
 
-      {user.isAuth && auhtRoutes.map(({path,Component}) =>      
-        <Route key={path} path={path} element={<Component/>} exact/>
-      )}
-      {publicRoutes.map(({path,Component}) =>      
-        <Route key={path} path={path} element={<Component/>} exact/>
-      )}
-     <Route index path={SHOP_ROUTE} component={<Shop/>}/>
+      {
+        user.isAuth && auhtRoutes.map(
+          ({path,Component}) =>      
+          <Route key={path} path={path} element={<Component/>} exact/>
+        )
+      }
+      {
+        publicRoutes.map(({path,Component}) =>      
+          <Route key={path} path={path} element={<Component/>} exact/>
+        )
+      }
 
     </Routes>
   )

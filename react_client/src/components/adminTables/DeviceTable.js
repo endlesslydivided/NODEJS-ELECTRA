@@ -75,7 +75,7 @@ const DeviceTable = observer(() =>
             {device !== undefined ?
                 
                 device.devices.map(device =>
-                    (<tr>
+                    (<tr key={device.id}>
                         <td>{device.id}</td>
                         <td>{device.name}</td>
                         <td>{device.price}</td>

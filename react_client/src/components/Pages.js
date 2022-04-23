@@ -16,7 +16,7 @@ const Pages =observer( (props) => {
 
     return (
 
-            <Pagination className="w-100"
+            <Pagination className={ "w-100 my-3 " + props.className} style={{borderRadius: '50px'}}
 
             showFirstButton showLastButton
             variant="outlined"

@@ -57,7 +57,7 @@ const BasketDeviceTable = observer(() =>
             {basketDevice !== undefined ?
                 
                 basketDevice.basketDevices.map((basketDevice) =>
-                    (<tr>
+                    (<tr key={basketDevice.id}>
                         <td>{basketDevice.id}</td>
                         <td>{basketDevice.basketId}</td>
                         <td>{basketDevice.deviceId}</td>
@@ -82,7 +82,7 @@ const BasketDeviceTable = observer(() =>
             </tbody>
             <tfoot>
             <tr>
-                <td class="justify-content-center" colSpan={7}>
+                <td className="justify-content-center" colSpan={7}>
                 <Pages
                     totalCount={basketDevice.totalCount}
                     limit={basketDevice.limit}

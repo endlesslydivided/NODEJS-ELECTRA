@@ -2,7 +2,7 @@ const {Device, DeviceInfo} = require('../models/models');
 const ApiError = require('../error/ApiError');
 const uuid = require('uuid');
 const path = require('path');
-
+const {Op} = require('Sequelize')
 class DeviceController
 {
     async create(request,response,next)
@@ -97,28 +97,52 @@ class DeviceController
 
     async getAllList(request,response)
     {
-        let {brandId,typeId,limit,page} = request.query;
+        let {brandId,typeId,limit,sendRating,page} = request.query;
 
         page = page || 1;
         limit = limit || 9;
         let offset = page * limit - limit;
-        let devices;
+        let devices;            
 
         if(!brandId && !typeId)
         {
-            devices  = await Device.findAndCountAll({limit,offset});
+            devices  = await Device.findAndCountAll(
+            {where :
+                {rating:
+                    {[Op.gte]: sendRating[0],[Op.lte]: sendRating[1]}
+                }
+            },{limit,offset});
         }
         else if(brandId && !typeId)
         {
-            devices  = await Device.findAndCountAll({where :{brandId},limit,offset});
+            devices  = await Device.findAndCountAll(
+                {where :
+                    {rating:
+                        {[Op.gte]: sendRating[0],[Op.lte]: sendRating[1]}
+                    ,
+                    brandId}
+                },{limit,offset});
         }
         else if(!brandId && typeId)
         {
-            devices  = await Device.findAndCountAll({where :{typeId},limit,offset});
+            devices  = await Device.findAndCountAll(
+                {where :
+                    {rating:
+                        {[Op.gte]: sendRating[0],[Op.lte]: sendRating[1]}
+                    ,
+                    brandId}
+                },{limit,offset});
         }
         else
         {
-            devices  = await Device.findAndCountAll({where :{typeId,brandId},limit,offset});
+            devices  = await Device.findAndCountAll(
+                {where :
+                    {rating:
+                        {[Op.gte]: sendRating[0],[Op.lte]: sendRating[1]}
+                    ,
+                    brandId,
+                    typeId}
+                },{limit,offset});
 
         }
         return response.json(devices);

@@ -24,3 +24,52 @@
 {
     padding:0 0 0 0
 }
+
+
+.glass-black
+{
+    background-color: rgba(0, 0, 0, .13);  
+    backdrop-filter: blur(25px);
+    border-radius: 30px;
+}
+
+.glass-light
+{
+    background-color: rgba(255, 255, 255, .13);  
+    backdrop-filter: blur(25px);
+    border-radius: 30px;
+}
+
+.rounded-window
+{
+    border-radius: 15px;
+
+}
+
+.btn-glow,.btn-glow:focus
+{
+    text-decoration:none;
+    color:black;
+    border-radius: 0;
+    border: 2px solid black;
+    box-shadow: 0 0 15px rgb(0, 0, 0, .25);
+    background: rgb(255, 255, 255, .95);
+}
+
+
+
+.btn-glow:hover
+{
+    color:black;
+    border: 2px solid black;
+    background: rgb(255, 255, 255, .35);
+    box-shadow: 0 0 35px rgb(0, 0, 0, .55);
+}
+
+.btn-glow:active
+{
+    color:white;
+    border: 2px solid black;
+    background: black;
+    box-shadow: 0 0 35px rgb(0, 0, 0, .55);
+}

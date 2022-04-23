@@ -31,9 +31,9 @@ const  App = observer(() =>
   if(loading)
   {
       return (
-      <p className=" d-flex align-items-center justify-content-center">
+      <div className=" d-flex align-content-center justify-content-center">
         <Spinner  animation={"border"}/>
-      </p>)
+      </div>)
   }
 
   return (

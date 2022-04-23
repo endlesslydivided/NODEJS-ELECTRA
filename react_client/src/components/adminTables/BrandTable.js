@@ -60,7 +60,7 @@ const BrandTable = observer(() =>
             {brand !== undefined ?
                 
                 brand.brands.map((brand) =>
-                    (<tr>
+                    (<tr  key={brand.id}>
                         <td>{brand.id}</td>
                         <td>{brand.name}</td>
                         <td>{brand.createdAt}</td>

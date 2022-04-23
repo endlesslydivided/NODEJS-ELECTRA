@@ -71,10 +71,16 @@ export const createDevice = async (device) => {
     return data
 }
 
-export const fetchDevices = async (typeId, brandId, page, limit = 9) => {
+export const fetchDevices = async (typeId, brandId, rating,page, limit = 10) => 
+{
+    const sendRating=[0,5];
+    sendRating[0] = Math.ceil(rating[0] / 20);
+    sendRating[1] = Math.ceil(rating[1] / 20);
+
+    
     const { data } = await $host.get('api/device', {
         params: {
-            typeId, brandId, page, limit
+            typeId, brandId,limit,page,sendRating,
         }
     })
     return data

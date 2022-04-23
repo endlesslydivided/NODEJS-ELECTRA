@@ -14,10 +14,11 @@ export default class DeviceStore{
 
         this._selectedType = {}
         this._selectedBrand = {}
+        this._selectedRate =[0,100]
 
         this._page = 1
         this._totalCount = 0
-        this._limit = 9
+        this._limit = 10
         makeAutoObservable(this)
     }
 
@@ -64,6 +65,12 @@ export default class DeviceStore{
     setTotalCount(count) {
         this._totalCount = count
     }
+    
+    setSelectedRate(selectedRate)
+    {
+        this._selectedRate = selectedRate
+
+    }
 
     get types() {
         return this._types
@@ -79,6 +86,9 @@ export default class DeviceStore{
     }
     get selectedBrand() {
         return this._selectedBrand
+    }
+    get selectedRate() {
+        return this._selectedRate
     }
     get totalCount() {
         return this._totalCount

@@ -2,14 +2,13 @@ import React, {useContext, useEffect} from 'react';
 import {Container} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import TypeBar from "../components/TypeBar";
-import BrandBar from "../components/BrandBar";
+import FilterBar from "../components/FilterBar";
 import DeviceList from "../components/DeviceList";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
-import {fetchBrands, fetchDevices, fetchTypes} from "../http/deviceAPI";
 import Pages from "../components/Pages";
-
+import {fetchAllBrands, fetchDevices, fetchAllTypes} from "../http/deviceAPI";
+import "./css/common.css"
 
 
 const Shop = observer(() => {
@@ -17,9 +16,11 @@ const Shop = observer(() => {
 
   useEffect(() =>
   {
-    fetchTypes().then(data =>device.setTypes(data))
-    fetchBrands().then(data =>device.setBrands(data))
-    fetchDevices(null, null, 1, 2).then(data => {
+    fetchAllTypes().then(data =>
+      device.setTypes(data))
+    fetchAllBrands().then(data =>
+      device.setBrands(data))
+    fetchDevices(null, null,device.selectedRate, 1, device.limit).then(data => {
       device.setDevices(data.rows)
       device.setTotalCount(data.count)
   })
@@ -28,26 +29,33 @@ const Shop = observer(() => {
 
   useEffect(() =>
   {
-      fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, 2).then(data => {
+      fetchDevices(device.selectedType.id, device.selectedBrand.id,device.selectedRate, device.page, device.limit).then(data => {
         device.setDevices(data.rows)
         device.setTotalCount(data.count)
     })
-  }, [device.page, device.selectedType, device.selectedBrand,])
+  }, [device.page, device.selectedType, device.selectedBrand,device.selectedRate,])
+
+ 
 
   return (
-    <Container>
-      <Row className="mt-2">
+    <Container className="mt-4 p-2 px-4 glass-light shadow">
+      <Row className="my-1 ">
         <Col md={3}>
-          <TypeBar/>
+          <FilterBar/>
         </Col>
-        <Col md={9}>
-          <BrandBar/>
+        <Col md={9} >
           <DeviceList/>
-          <Pages/>
+          <Pages
+                    className="bg-light p-2"
+                    totalCount={device.totalCount}
+                    limit={device.limit}
+                    pageO={device.page}
+                    updateData ={(event, value) => device.setPage(value)}
+                />
         </Col>
       </Row>
     </Container>
   )
 })
 
-export default Shop
+export default Shop;

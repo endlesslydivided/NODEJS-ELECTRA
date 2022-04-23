@@ -62,7 +62,7 @@ const RatingTable = observer(() =>
             {rating !== undefined ?
                 
                 rating.ratings.map((rating) =>
-                    (<tr>
+                    (<tr key={rating.id}>
                         <td>{rating.id}</td>
                         <td>{rating.userId}</td>
                         <td>{rating.deviceId}</td>
@@ -88,7 +88,7 @@ const RatingTable = observer(() =>
             </tbody>
             <tfoot>
             <tr>
-                <td class="justify-content-center" colSpan={7}>
+                <td className="justify-content-center" colSpan={7}>
                 <Pages
                     totalCount={rating.totalCount}
                     limit={rating.limit}
