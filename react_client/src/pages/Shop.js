@@ -38,7 +38,10 @@ const Shop = observer(() => {
  
 
   return (
-    <Container className="mt-4 p-2 px-4 glass-light shadow">
+    <Container 
+    className="my-4 py-md-2 px-md-4  px-sm-4 
+               
+    glass-light shadow">
       <Row className="my-1 ">
         <Col md={3}>
           <FilterBar/>

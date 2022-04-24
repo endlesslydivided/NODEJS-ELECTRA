@@ -28,15 +28,7 @@ const User = sequelize.define('user',
     }
 })
 
-const Basket = sequelize.define('basket',
-{
-    id:
-    {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    }
-})
+
 
 const BasketDevice = sequelize.define('basket_Device',
 {
@@ -45,7 +37,21 @@ const BasketDevice = sequelize.define('basket_Device',
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
-    }
+    },
+    userId:
+    {
+        type: DataTypes.INTEGER,
+        unique:true,
+        allowNull: false,
+        onDelete: 'CASCADE'
+    },
+    deviceId:
+    {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        onDelete: 'CASCADE'
+    },
+
 })
 
 const Device = sequelize.define('device',
@@ -68,13 +74,6 @@ const Device = sequelize.define('device',
     {
         type: DataTypes.DECIMAL,
         allowNull: false
-    },
-
-    rating:
-    {
-        type: DataTypes.DOUBLE,
-        unique: true,
-        defaultValue: 0
     },
 
     image:
@@ -172,14 +171,12 @@ const DeviceInfo = sequelize.define('device_Info',
 })
 
 
-User.hasOne(Basket)
-Basket.belongsTo(User)
+User.hasMany(BasketDevice)
+BasketDevice.belongsTo(User)
 
 User.hasMany(Rating)
 Rating.belongsTo(User)
 
-Basket.hasMany(BasketDevice)
-BasketDevice.belongsTo(Basket)
 
 Type.hasMany(Device)
 Device.belongsTo(Type)
@@ -201,7 +198,6 @@ DeviceInfo.belongsTo(Device)
 module.exports =
 {
     User,
-    Basket,
     BasketDevice,
     Device,
     Type,

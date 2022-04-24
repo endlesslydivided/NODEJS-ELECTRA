@@ -5,8 +5,8 @@ class BasketDeviceController
 {
     async create(request,response)
     {
-        const {basketId,deviceId} = request.body;
-        const basketDevice = await BasketDevice.create({basketId,deviceId});
+        const {userId,deviceId} = request.body;
+        const basketDevice = await BasketDevice.create({userId,deviceId});
         return response.json(basketDevice);
     }
 

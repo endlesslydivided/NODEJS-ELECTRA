@@ -104,8 +104,8 @@ export const deleteDevice = async (id) => {
 
 /* #region  RatingMethods */
 
-export const createRating = async (device) => {
-    const { data } = await $authHost.post('api/rating', device)
+export const createRating = async (rating) => {
+    const { data } = await $authHost.post('api/rating', rating)
     return data
 }
 
@@ -115,6 +115,11 @@ export const fetchRatings = async (page, limit = 9) => {
             page, limit
         }
     })
+    return data
+}
+
+export const fetchAllRatingsByDevice = async (deviceId) => {
+    const { data } = await $host.get(`api/rating/${deviceId}/all`)
     return data
 }
 
@@ -136,8 +141,8 @@ export const deleteRating = async (id) => {
 
 /* #region  BasketDeviceMethods */
 
-export const createBasketDevice = async (basketdevice) => {
-    const { data } = await $authHost.post('api/basketdevice', basketdevice)
+export const createBasketDevice = async (basketDevice) => {
+    const { data } = await $authHost.post('api/basketdevice', basketDevice)
     return data
 }
 

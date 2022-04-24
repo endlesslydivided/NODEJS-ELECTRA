@@ -65,7 +65,7 @@ const FilterBar = observer(() => {
         <Row >
         
             <Dropdown >
-            <Dropdown.Toggle className="rounded-window shadow-sm  w-100 my-2" 
+            <Dropdown.Toggle className="text-muted rounded-window shadow-sm overflow-hidden  w-100 my-2" 
             variant={"outline-dark"}>{device.selectedType.name || "Выберите тип устройства"}
             </Dropdown.Toggle>
             <Dropdown.Menu>
@@ -91,8 +91,8 @@ const FilterBar = observer(() => {
             </Dropdown>
         </Row>
         <Row>
-            <Dropdown placeholder='Выберите бренд устройства'>
-            <Dropdown.Toggle  className="rounded-window shadow-sm  w-100 my-2"  
+            <Dropdown >
+            <Dropdown.Toggle  className="text-muted  text-left rounded-window shadow-sm overflow-hidden w-100 my-2"  
             variant={"outline-dark"}>{device.selectedBrand.name || "Выберите бренд устройства"}
             </Dropdown.Toggle>
             <Dropdown.Menu>

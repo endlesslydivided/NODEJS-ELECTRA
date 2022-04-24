@@ -27,7 +27,7 @@ const DeviceTable = observer(() =>
     
         useEffect(() =>
         {
-            fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, device.limit).then(data => {
+            fetchDevices(device.selectedType.id, device.selectedBrand.id,[0,100], device.page, device.limit).then(data => {
             device.setDevices(data.rows)
             device.setTotalCount(data.count)
         })
@@ -35,7 +35,7 @@ const DeviceTable = observer(() =>
 
         const getDevices = () =>
         {
-            fetchDevices(null, null, 1, device.limit).then(data => {
+            fetchDevices(null, null,[0,100], 1, device.limit).then(data => {
                 device.setDevices(data.rows)
                 device.setTotalCount(data.count)
             })
@@ -61,7 +61,6 @@ const DeviceTable = observer(() =>
                     <th>Id</th>
                     <th>Name</th>
                     <th>Price</th>
-                    <th>Rating</th>
                     <th>Image</th>
                     <th>CreatedAt</th>
                     <th>UpdatedAt</th>
@@ -79,7 +78,6 @@ const DeviceTable = observer(() =>
                         <td>{device.id}</td>
                         <td>{device.name}</td>
                         <td>{device.price}</td>
-                        <td>{device.rating}</td>
                         <td>{device.image}</td>
                         <td>{device.createdAt}</td>
                         <td>{device.updatedAt}</td>

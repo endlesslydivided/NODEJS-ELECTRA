@@ -1,8 +1,9 @@
-const {Device, DeviceInfo} = require('../models/models');
+const {Device, DeviceInfo, Rating} = require('../models/models');
 const ApiError = require('../error/ApiError');
 const uuid = require('uuid');
 const path = require('path');
-const {Op} = require('Sequelize')
+const {Op,Sequelize,QueryTypes } = require('Sequelize');
+const { sequelize } = require('sequelize/lib/model');
 class DeviceController
 {
     async create(request,response,next)
@@ -101,49 +102,52 @@ class DeviceController
 
         page = page || 1;
         limit = limit || 9;
-        let offset = page * limit - limit;
-        let devices;            
+        sendRating[0] = sendRating[0] || 0;
+        sendRating[1] = sendRating[1] || 5;
 
-        if(!brandId && !typeId)
+        let offset = page * limit - limit;
+        let devices= 
         {
-            devices  = await Device.findAndCountAll(
-            {where :
-                {rating:
-                    {[Op.gte]: sendRating[0],[Op.lte]: sendRating[1]}
-                }
-            },{limit,offset});
-        }
-        else if(brandId && !typeId)
+            rows: [],
+            count: 0
+        };
+
+        let queryConstruct = "";
+  
+        if(brandId && !typeId)
         {
-            devices  = await Device.findAndCountAll(
-                {where :
-                    {rating:
-                        {[Op.gte]: sendRating[0],[Op.lte]: sendRating[1]}
-                    ,
-                    brandId}
-                },{limit,offset});
+            queryConstruct = `and "brandId" = ${brandId}`;
         }
         else if(!brandId && typeId)
         {
-            devices  = await Device.findAndCountAll(
-                {where :
-                    {rating:
-                        {[Op.gte]: sendRating[0],[Op.lte]: sendRating[1]}
-                    ,
-                    brandId}
-                },{limit,offset});
+            queryConstruct = `and "typeId" = ${typeId}`;
         }
-        else
+        else if(brandId && typeId)
         {
-            devices  = await Device.findAndCountAll(
-                {where :
-                    {rating:
-                        {[Op.gte]: sendRating[0],[Op.lte]: sendRating[1]}
-                    ,
-                    brandId,
-                    typeId}
-                },{limit,offset});
-
+            queryConstruct = `and "brandId" = ${brandId} and "typeId" = ${typeId}`;
+        }
+        
+        const query = 
+        `Select Count(*), id, name,price,image,"createdAt","updatedAt","typeId","brandId", average
+            from 
+                (SELECT devices.Id, devices.name,devices.price,devices.image,devices."createdAt",devices."updatedAt","typeId",
+            "brandId", AVG(rate) as average 
+            FROM 
+                devices left outer join ratings on devices.id = "deviceId" 
+            group by (devices.Id, devices.name,devices.price,devices.image,devices."createdAt",devices."updatedAt","typeId","brandId")
+            having  (AVG(rate) >= ${sendRating[0]} and AVG(rate) <= ${sendRating[1]} or AVG(rate) is null) ${queryConstruct} LIMIT '${limit}' OFFSET ${offset}) tableA
+        group by (id, name,price,image,"createdAt","updatedAt","typeId",
+        "brandId", average)`
+        
+        try
+        {
+            devices.rows = await Device.sequelize.query(query, { type: QueryTypes.SELECT });
+            if(devices.rows.length > 0)
+                devices.count = devices.rows[0].count;
+        }
+        catch (error)
+        {
+            console.log(error);
         }
         return response.json(devices);
     }

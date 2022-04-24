@@ -8,6 +8,7 @@ router.get('/',ratingController.getAllList)
 router.get('/all',ratingController.getAll)
 router.delete('/:id',ratingController.delete)
 router.get('/:id',ratingController.getOne)
+router.get('/:deviceId/all',ratingController.getAllByDevice)
 
 
 module.exports = router;

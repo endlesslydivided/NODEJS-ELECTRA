@@ -1,4 +1,4 @@
-const {Rating} = require('../models/models');
+const {Rating,Device} = require('../models/models');
 const ApiError = require('../error/ApiError');
 
 class RatingController
@@ -13,6 +13,20 @@ class RatingController
     async getAll(request,response)
     {
         const ratings = await Rating.findAll();
+        return response.json(ratings);
+    }
+
+    
+    async getAllByDevice(request,response)
+    {
+        let {deviceId} = request.params;
+
+        const ratings = await Rating.findAll(
+            {
+                where:{deviceId},
+                include : [{model: Device,as: 'device'}]
+            }
+        )
         return response.json(ratings);
     }
 

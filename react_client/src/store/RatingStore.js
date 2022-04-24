@@ -2,7 +2,7 @@ import {makeAutoObservable} from "mobx";
 
 export default class RatingStore{
     constructor() {
-        this._brandId = 0
+        this._deviceId = 0
         this._userId = 0
         this._rate = 0     
         this._ratings = []   
@@ -12,8 +12,8 @@ export default class RatingStore{
         makeAutoObservable(this)
     }
 
-    setBrandId(brandId) {
-        this._brandId = brandId
+    setDeviceId(deviceId) {
+        this._deviceId = deviceId
     }
 
     setRatings(ratings) {
@@ -34,8 +34,8 @@ export default class RatingStore{
         this._totalCount = count
     }
 
-    get brandId() {
-        return this._brandId
+    get deviceId() {
+        return this._deviceId
     }
 
     get ratings() {

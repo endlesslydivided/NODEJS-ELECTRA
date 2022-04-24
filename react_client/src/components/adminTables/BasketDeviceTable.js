@@ -46,7 +46,7 @@ const BasketDeviceTable = observer(() =>
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>BasketId</th>
+                    <th>UserId</th>
                     <th>DeviceId</th>
                     <th>CreatedAt</th>
                     <th>UpdatedAd</th>
@@ -59,7 +59,7 @@ const BasketDeviceTable = observer(() =>
                 basketDevice.basketDevices.map((basketDevice) =>
                     (<tr key={basketDevice.id}>
                         <td>{basketDevice.id}</td>
-                        <td>{basketDevice.basketId}</td>
+                        <td>{basketDevice.userId}</td>
                         <td>{basketDevice.deviceId}</td>
                         <td>{basketDevice.createdAt}</td>
                         <td>{basketDevice.updatedAt}</td>
