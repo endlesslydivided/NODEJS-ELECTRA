@@ -3,7 +3,7 @@ import { Context } from "../index";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
-import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from "../utils/consts";
+import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE,INTO_CHAT } from "../utils/consts";
 import { Button } from "react-bootstrap";
 import { observer } from "mobx-react-lite";
 import Container from "react-bootstrap/Container";
@@ -255,15 +255,20 @@ const NavBar = observer(() => {
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
+                <Nav className="ml-auto " style={{ color: 'white' }}>
+                    <p style={{ color: 'white', textDecoration: 'none',cursor:'pointer' }} className="m-0" onClick={() => navigate(SHOP_ROUTE)}>ELECTRA</p>
+                </Nav>
 
-                <NavLink style={{ color: 'white', textDecoration: 'none' }} to={SHOP_ROUTE}>ELECTRA</NavLink>
+                <Nav className="ml-auto" style={{ color: 'white' }}>
+                            <Button variant={"outline-light"} onClick={() => navigate(INTO_CHAT)}>Техподдержка</Button>
+                </Nav>
                 {
                     user.isAuth ?
 
                         <Nav className="ml-auto" style={{ color: 'white' }}>
                             <Button
                                 variant={"outline-light"}
-                                onClick={() => navigate(ADMIN_ROUTE, { replace: true })}
+                                onClick={() => navigate(ADMIN_ROUTE)}
                             >
                                 Администрирование
                             </Button>

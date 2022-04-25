@@ -170,9 +170,47 @@ const DeviceInfo = sequelize.define('device_Info',
     }
 })
 
+const ChatRoom = sequelize.define('chatRoom',
+{
+    id:
+    {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+
+    userId:
+    {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    
+    adminId:
+    {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+
+
+    closedAt:
+    {
+        type: DataTypes.DATE,
+        allowNull: true
+    }
+
+
+
+})
+
+
+
 
 User.hasMany(BasketDevice)
 BasketDevice.belongsTo(User)
+
+User.hasMany(ChatRoom)
+ChatRoom.belongsTo(User)
+
 
 User.hasMany(Rating)
 Rating.belongsTo(User)
@@ -203,5 +241,6 @@ module.exports =
     Type,
     Brand,
     Rating,
-    DeviceInfo
+    DeviceInfo,
+    ChatRoom
 }
