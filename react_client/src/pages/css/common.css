@@ -73,3 +73,11 @@
     background: black;
     box-shadow: 0 0 35px rgb(0, 0, 0, .55);
 }
+
+.neo
+{
+    box-shadow: 5px 5px 10px rgb(13, 39, 80,.16),
+    inset -10px -10px 90px  rgb(255, 255, 255,.50);
+    
+    
+}

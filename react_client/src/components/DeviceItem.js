@@ -58,7 +58,7 @@ const DeviceItem = ({device}) => {
             </Card.Body>
             <Card.Footer>
             <Button 
-                    onClick={() =>navigate(DEVICE_ROUTE + '/' + device.id, { replace: true })} 
+                    onClick={() =>navigate(DEVICE_ROUTE + '/' + device.id)} 
                     className="btn-glow w-100 text-center">Просмотр</Button>
             </Card.Footer>
                 

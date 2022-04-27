@@ -6,7 +6,7 @@ import Shop from './pages/Shop'
 import UserChat from './pages/UserChat'
 
 
-import {ADMIN_ROUTE,BASKET_ROUTE, DEVICE_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE,INTO_CHAT} from './utils/consts'
+import {ADMIN_ROUTE,BASKET_ROUTE, DEVICE_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE,INTO_CHAT_ROUTE} from './utils/consts'
 
 export const auhtRoutes = 
 [
@@ -43,7 +43,11 @@ export const publicRoutes =
         Component: DevicePage
     },
     {
-        path : INTO_CHAT,
+        path : INTO_CHAT_ROUTE,
+        Component: UserChat
+    },
+    {
+        path : INTO_CHAT_ROUTE + '/:id',
         Component: UserChat
     },
 

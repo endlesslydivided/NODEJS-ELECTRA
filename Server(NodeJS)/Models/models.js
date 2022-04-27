@@ -191,6 +191,12 @@ const ChatRoom = sequelize.define('chatRoom',
         allowNull: true
     },
 
+    username:
+    {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+
 
     closedAt:
     {

@@ -8,7 +8,7 @@ export default class RatingStore{
         this._ratings = []   
         this._page = 1
         this._totalCount = 0
-        this._limit = 9
+        this._limit = 10
         makeAutoObservable(this)
     }
 

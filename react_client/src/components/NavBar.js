@@ -3,7 +3,7 @@ import { Context } from "../index";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
-import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE,INTO_CHAT } from "../utils/consts";
+import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE,INTO_CHAT_ROUTE } from "../utils/consts";
 import { Button } from "react-bootstrap";
 import { observer } from "mobx-react-lite";
 import Container from "react-bootstrap/Container";
@@ -260,12 +260,17 @@ const NavBar = observer(() => {
                 </Nav>
 
                 <Nav className="ml-auto" style={{ color: 'white' }}>
-                            <Button variant={"outline-light"} onClick={() => navigate(INTO_CHAT)}>Техподдержка</Button>
+                            <Button variant={"outline-light"} onClick={() => navigate(INTO_CHAT_ROUTE)}>Техподдержка</Button>
                 </Nav>
                 {
                     user.isAuth ?
 
-                        <Nav className="ml-auto" style={{ color: 'white' }}>
+                    <Nav className="ml-auto" style={{ color: 'white' }}>
+
+                        {
+                            user.user.role === "ADMIN"
+                            ?
+                            <div>
                             <Button
                                 variant={"outline-light"}
                                 onClick={() => navigate(ADMIN_ROUTE)}
@@ -279,6 +284,20 @@ const NavBar = observer(() => {
                             >
                                 Выйти
                             </Button>
+                            </div>
+                            :
+                            <div>
+
+                            <Button
+                                variant={"outline-light"}
+                                className="ml-2"
+                                onClick={() => logOut()}
+                            >
+                                Выйти
+                            </Button>
+                            </div>
+
+                        }   
                         </Nav>
 
                         :

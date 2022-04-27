@@ -11,6 +11,18 @@ const wss = new ws.Server(
     }
 )
 
+let rooms = {};
+
+const leave = (room,userId) => 
+{
+    if(! rooms[room][userId]) 
+        return;
+    if(Object.keys(rooms[room]).length === 1) 
+        delete rooms[room];
+    else 
+        delete rooms[room][userId];
+  };
+
 wss.on('connection', function connection(ws)
 {
 
@@ -23,88 +35,123 @@ wss.on('connection', function connection(ws)
         {
             case 'message':
                 {
-                    const userId = messageIn.userId ? messageIn.userId : null;
-                    const userName = messageIn.userName;
+                    const userId = messageIn.userId;
+                    const username = messageIn.username;
 
                     messageOut = 
                     {
-                        id: chatRoom.id,
+                        id: messageIn.id,
                         userId: userId,
-                        userName: userName,
+                        username: username, 
                         message: messageIn.message,
-                        adminId: null,
-                        adminName: null,
+                        adminId: messageIn.adminId,
+                        adminname: messageIn.adminname,
                         event: "message",
                         state: "wait",
                         from: messageIn.from,
-                        to: messageIn.to
+                        to: messageIn.to,
+                        sendBySender: messageIn.sendBySender,
+                        receivedByServer: new Date(Date.now()).toUTCString(),
                     }
-                    ws.send(JSON.stringify(messageOut));
+                    Object.entries(rooms[messageIn.id]).forEach(([, sock]) => sock.send(JSON.stringify(messageOut)));
                     break;
                 }
             case 'connection':
                 {
-                    const userId = messageIn.userId ? messageIn.userId : null;
-                    const userName = messageIn.userName;
 
-                    chatRoom = await ChatRoom.create({userId});
+                    const userId = messageIn.userId;
+                    const username = messageIn.username;
+
+                    chatRoom = await ChatRoom.create({userId,username: username});
                     messageOut = 
                         {
                             id: chatRoom.id,
                             userId: userId,
-                            userName: userName,
+                            username: username,
                             message: messageIn.message,
                             adminId: null,
-                            adminName: null,
+                            adminname: null,
                             event: "connection",
                             state: "wait",
                             from: messageIn.from,
-                            to: messageIn.to
+                            to: messageIn.to,
+                            sendBySender: messageIn.sendBySender,
+                            receivedByServer: new Date(Date.now()).toUTCString(),
                         }
-                    ws.send(JSON.stringify(messageOut));
+                    if(! rooms[chatRoom.id]) rooms[chatRoom.id] = {};
+                    if(! rooms[chatRoom.id][userId])rooms[chatRoom.id][userId] = ws;
+                    Object.entries(rooms[chatRoom.id]).forEach(([, sock]) => sock.send(JSON.stringify(messageOut)));
+                    
                     break;
                 }
             case 'adminEnter':
                 {
 
                     const adminId = messageIn.adminId;
-                    const adminName = messageIn.adminName;
-
-                    chatRoom = ChatRoom.update({where: messageIn.id}, {adminId})
+                    const adminname = messageIn.adminname;
+                    chatRoom = await ChatRoom.findOne({where: {id: messageIn.id}});
+                    await ChatRoom.update({adminId},
+                        {where:
+                            {
+                                id: messageIn.id
+                            }
+                        });
                     messageOut = 
                         {
                             id: chatRoom.id,
-                            userId: messageIn.userId,
-                            userName: userName,
+                            userId: chatRoom.userId,
+                            username: chatRoom.username,
                             message: messageIn.message,
                             adminId: adminId,
-                            adminName: adminName,
+                            adminname: adminname,
                             event: "adminEnter",
                             state: "answering",
                             from: messageIn.from,
-                            to: messageIn.to  
+                            to: messageIn.to,
+                            sendBySender: messageIn.sendBySender,
+                            receivedByServer: new Date(Date.now()).toUTCString(),  
                         }
-                  
-                    ws.send(JSON.stringify(message));
+                        if(! rooms[chatRoom.id][adminId])rooms[chatRoom.id][adminId] = ws;
+                        Object.entries(rooms[chatRoom.id]).forEach(([, sock]) => sock.send(JSON.stringify(messageOut)));
                     break;
                 }
             case 'close':
                 {
                     const closedAt = Date.now();
-                    chatRoom = ChatRoom.update({where: messageIn.id}, {closedAt})
                     messageOut = 
                         {
-                            id: chatRoom.id,
+                            id: messageIn.id,
                             userId: messageIn.userId,
-                            userName: userName,
+                            username: messageIn.username,
                             message: messageIn.message,
-                            adminId: adminId,
-                            adminName: adminName,
+                            adminId: messageIn.adminId,
+                            adminname: messageIn.adminname,
                             event: "close",
                             state: "closed",
                             from: messageIn.from,
-                            to: messageIn.to  
+                            to: messageIn.to,
+                            sendBySender: messageIn.sendBySender,
+                            receivedByServer: new Date(Date.now()).toUTCString(), 
                         }
+                    
+                    if(messageIn.from === 'client')
+                    {
+                        ws.close(3000,'clientOut');
+                        leave(messageIn.id,messageIn.userId);
+                        await ChatRoom.update({closedAt},
+                            {where:
+                                {
+                                    id: messageIn.id
+                                }
+                            });
+                    }
+                    else
+                    {
+                        ws.close(3001,'adminOut');
+                        leave(messageIn.id,messageIn.adminId);
+                    }
+                    Object.entries(rooms[messageIn.id]).forEach(([, sock]) => sock.send(JSON.stringify(messageOut)));
+
                     break;
                 }
         }
@@ -118,9 +165,9 @@ module.exports = wss;
 {
     id: 0,
     userId: 1,
-    userName: "Александр",
+    username: "Александр",
     adminId: 1,
-    adminName: "Ольга"
+    adminname: "Ольга"
     event: "message",
     state: "answering",
     from: "client",

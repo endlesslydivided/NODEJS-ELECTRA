@@ -10,6 +10,7 @@ import './css/common.css'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import {observer} from "mobx-react-lite";
+import ChatRoomsTable from '../components/adminTables/ChatRoomsTable';
 
 const AdminPanel = observer(() => {
 
@@ -30,6 +31,9 @@ const AdminPanel = observer(() => {
         </Tab> 
         <Tab eventKey="basketDeviceTable" title="BasketDeviceTable">
           <BasketDeviceTable/>
+        </Tab> 
+        <Tab eventKey="chatRooms" title="Чаты технической поддержки">
+          <ChatRoomsTable/>
         </Tab> 
 
     </Tabs>

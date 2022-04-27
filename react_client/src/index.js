@@ -1,3 +1,5 @@
+import 'react-app-polyfill/ie9';
+import 'react-app-polyfill/ie11';  
 import React, {createContext} from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
@@ -6,9 +8,9 @@ import DeviceStore from './store/DeviceStore';
 import UserStore from './store/UserStore';
 import TypeStore from './store/TypeStore';
 import RatingStore from './store/RatingStore';
-import BasketDeviceStore from './store/BasketDeviceStore';
-
+import BasketDeviceStore from './store/BasketDeviceStore'; 
 import "./pages/css/index.css"
+import ChatRoomsStore from './store/ChatRoomsStore';
 export const Context = createContext(null);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -20,6 +22,7 @@ root.render(
     type: new TypeStore(),
     rating: new RatingStore(),
     basketDevice: new BasketDeviceStore(),
+    chatRoom: new ChatRoomsStore()
   }}>
     <App className="gradientBackground"/>
   </Context.Provider>
