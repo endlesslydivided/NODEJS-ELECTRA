@@ -1,7 +1,8 @@
 import React, {useContext, useEffect,useState} from 'react';
 import {Container} from "react-bootstrap";
 import QuestionAnswer from '@mui/icons-material/QuestionAnswer';
-import AddIcon from '@mui/icons-material/Add';
+import Check from '@mui/icons-material/Check';
+import { Box } from '@mui/system';
 import {useNavigate} from "react-router-dom"
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
@@ -30,7 +31,7 @@ const ChatRoomsTable = observer(() =>
                 chatRoom.setChatRooms(data.rows)
                 chatRoom.setTotalCount(data.count)
         })
-        }, [chatRoom.page,])
+        }, [chatRoom.page,chatRoom.totalCount])
 
         const getChatRooms = () => {
             fetchChatRooms(1, chatRoom.limit,finished).then(data => 
@@ -73,6 +74,7 @@ const ChatRoomsTable = observer(() =>
                         <td>{chatRoom.updatedAt}</td>
                         <td>{chatRoom.closedAt ? chatRoom.closedAt : "Ожидает ответа"}</td>
                         <td>
+                        {!chatRoom.closedAt ?
                         <Button
                         variant={"outline-success"}
                         startIcon={<QuestionAnswer />}
@@ -81,6 +83,14 @@ const ChatRoomsTable = observer(() =>
                         >
                             Ответить
                         </Button>
+                        :
+                        <Box className={"d-flex justify-content-center"}>
+                        <Check/>
+                        <div>Завершено</div>
+
+                        </Box>
+
+                        }
                         </td>
 
                     </tr>)               
@@ -89,7 +99,7 @@ const ChatRoomsTable = observer(() =>
                 <tr></tr>
             }  
             </tbody>
-            <tfoot>
+            <tfoot className={"bg-light"}>
             <tr>
                
                 <td colSpan={8}>

@@ -13,6 +13,8 @@ const wss = new ws.Server(
 
 let rooms = {};
 
+
+
 const leave = (room,userId) => 
 {
     if(! rooms[room][userId]) 
@@ -25,6 +27,8 @@ const leave = (room,userId) =>
 
 wss.on('connection', function connection(ws)
 {
+
+    
 
     ws.on('message',async function receiveMessage(message)
     {
@@ -51,7 +55,7 @@ wss.on('connection', function connection(ws)
                         from: messageIn.from,
                         to: messageIn.to,
                         sendBySender: messageIn.sendBySender,
-                        receivedByServer: new Date(Date.now()).toUTCString(),
+                        receivedByServer: Date.now(),
                     }
                     Object.entries(rooms[messageIn.id]).forEach(([, sock]) => sock.send(JSON.stringify(messageOut)));
                     break;
@@ -76,7 +80,7 @@ wss.on('connection', function connection(ws)
                             from: messageIn.from,
                             to: messageIn.to,
                             sendBySender: messageIn.sendBySender,
-                            receivedByServer: new Date(Date.now()).toUTCString(),
+                            receivedByServer: Date.now(),
                         }
                     if(! rooms[chatRoom.id]) rooms[chatRoom.id] = {};
                     if(! rooms[chatRoom.id][userId])rooms[chatRoom.id][userId] = ws;
@@ -109,15 +113,16 @@ wss.on('connection', function connection(ws)
                             from: messageIn.from,
                             to: messageIn.to,
                             sendBySender: messageIn.sendBySender,
-                            receivedByServer: new Date(Date.now()).toUTCString(),  
+                            receivedByServer: Date.now(),  
                         }
+                        if(! rooms[chatRoom.id]) rooms[chatRoom.id] = {};
                         if(! rooms[chatRoom.id][adminId])rooms[chatRoom.id][adminId] = ws;
                         Object.entries(rooms[chatRoom.id]).forEach(([, sock]) => sock.send(JSON.stringify(messageOut)));
                     break;
                 }
             case 'close':
                 {
-                    const closedAt = Date.now();
+                    let closedAt = Date.now();
                     messageOut = 
                         {
                             id: messageIn.id,
@@ -131,13 +136,14 @@ wss.on('connection', function connection(ws)
                             from: messageIn.from,
                             to: messageIn.to,
                             sendBySender: messageIn.sendBySender,
-                            receivedByServer: new Date(Date.now()).toUTCString(), 
+                            receivedByServer: Date.now(), 
                         }
                     
                     if(messageIn.from === 'client')
                     {
                         ws.close(3000,'clientOut');
                         leave(messageIn.id,messageIn.userId);
+                         closedAt =  new Date(closedAt).toUTCString();
                         await ChatRoom.update({closedAt},
                             {where:
                                 {

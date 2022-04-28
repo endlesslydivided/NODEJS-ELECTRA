@@ -14,53 +14,54 @@ import { ADMIN_ROUTE } from '../utils/consts';
 const AdminChatWindow = observer((props) => {
 
     const [messages, setMessages] = useState([]);
-    const [value, setValue] = useState('');
-    const [chatId, setChatId] = useState(0)
-    const [username, setUserName] = useState('')
-    const [userId, setUserId] = useState(0)
-    const [event, setEvent] = useState("connection")
+    const [value,setValue] = useState('');
+    
     const navigate = useNavigate();
-    const [userState, setUserState] = useState("wait")
+   
     const {user} = useContext(Context)
-    const socket = useRef()
+    let socket = useRef(
+        {
+            socket: null,
+            chatId: 0,
+            username: '',
+            userId: 0,
+            event: "connection",
+            userState:"wait"
+        }
+    )
+
     useEffect(() =>
     {
         connect();
-        window.onpopstate = async ()=> {
-            let message;
-            window.alert("Клиент ожидает нового администратора")
-            await beforeExit();
-            setUserName('');
-            setUserId(0);
-            setUserState('wait')
+        window.onpopstate =  (event)=> 
+        {
+             beforeExit();
+            socket.current.username = '';
+            socket.current.userId = 0;
+            socket.current.userState = 'wait';
             navigate(ADMIN_ROUTE)
-
             }
+
+        window.onbeforeunload =  (event)=>
+        {
+             beforeExit();
+            socket.current.username = '';
+            socket.current.userId = 0;
+            socket.current.userState = 'wait';
+            navigate(ADMIN_ROUTE)
+    
+        }
     },[])
 
-    // useEffect(()=>
-    // {
 
-    // },[chatId,event,username,value,userState])
 
-    useBeforeunload(async (event) => 
-    {
-        event.preventDefault()
-       
-        event.returnValue ="Клиент ожидает нового администратора";
-        await beforeExit();
-        setUserName('');
-        setUserId(0);
-        setUserState('wait');
-        navigate(ADMIN_ROUTE)
 
-    });
 
     const beforeExit = () => 
     {
         let message;
             message = {
-                id: chatId,
+                id: socket.current.chatId,
                 userId: null,
                 username: null,
                 adminId: user.user.id ,
@@ -70,15 +71,15 @@ const AdminChatWindow = observer((props) => {
                 from: "admin",
                 to: "server"
             }  
-        socket.current.send(JSON.stringify(message));
+        socket.current.socket.send(JSON.stringify(message));
     }
 
    
     function connect() 
     {
-        socket.current = new WebSocket('ws://localhost:5001')
+        socket.current.socket = new WebSocket('ws://localhost:5001')
         let message;
-        socket.current.onopen = () => 
+        socket.current.socket.onopen = () => 
         {
             message = 
             {
@@ -91,53 +92,61 @@ const AdminChatWindow = observer((props) => {
                 state: "answering",
                 from: "admin",
                 to: "server",
-                sendBySender:new Date(Date.now()).toUTCString()
+                sendBySender:Date.now()
             }  
-                socket.current.send(JSON.stringify(message))
+                socket.current.socket.send(JSON.stringify(message))
         }
 
-        socket.current.onmessage = (event) => 
+        socket.current.socket.onmessage = (event) => 
         {
             
             const message = JSON.parse(event.data);
             if(message.event === 'adminEnter')
             {
-                setUserName(message.username);
-                setUserId(message.userId);
-                setUserState("answering");
-                setChatId(message.id);
+                socket.current.username = message.username;
+                socket.current.userId = message.userId;
+                socket.current.userState = "answering";
+                socket.current.chatId = message.id
+
             }
-            else if(message.event === 'close' && message.from === 'user')
+            else if(message.event === 'close' && message.from === 'client')
             {
                 window.alert("Пользователь отключился от чата.");
                 let messageOut = {
                     id: null,
-                    userId: userId,
+                    userId: socket.current.userId,
                     message: "Клиент отключён",
-                    username: username,
+                    username: socket.current.username,
                     adminId: user.user.id,
                     adminname: props.adminname,
                     event: 'close',
                     state: "closed",
                     from: "admin",
                     to: "server",
-                    sendBySender:new Date(Date.now()).toUTCString()
+                    sendBySender:Date.now()
                 }  
-                    socket.current.send(JSON.stringify(messageOut))
+                    socket.current.socket.send(JSON.stringify(messageOut))
                 navigate(ADMIN_ROUTE);
             }
            
             setMessages(prev => [message, ...prev])
         }
 
-        socket.current.onclose= () => 
+        socket.current.socket.onclose= (event) => 
         {
-            console.log('Socket закрыт')
+            const message = JSON.parse(event.data)
+
+            if(message.event === 'timerClosed')
+            {
+                window.alert("Чат был закрыт сервером по причине простоя");
+                navigate(ADMIN_ROUTE);
+            }        
         }
 
-        socket.current.onerror = () => 
+        socket.current.socket.onerror = () => 
         {
-            console.log('Socket произошла ошибка')
+            window.alert("Ошибка чата");
+            navigate(ADMIN_ROUTE);
         }
 
     }
@@ -145,30 +154,30 @@ const AdminChatWindow = observer((props) => {
     const sendMessage = async () => {
 
         let message = {
-            id: chatId,
+            id: socket.current.chatId,
             message: value,
-            userId: userId,
-            username: username,
+            userId: socket.current.userId,
+            username: socket.current.username,
             adminId: user.user.id,
             adminname: props.adminname,
             event: 'message',
-            state: userState,
+            state: socket.current.userState,
             from: 'admin',
             to: 'server',
-            sendBySender:new Date(Date.now()).toUTCString()
+            sendBySender:Date.now()
         }
 
-        if(userState === "answering")
+        if(socket.current.userState === "answering")
             message.to = 'client'
          
 
-        socket.current.send(JSON.stringify(message));
+        socket.current.socket.send(JSON.stringify(message));
         setValue('')
     }
 
   return (
     <Card className="p-4 w-100 h-100 ">
-        <Card.Title> Чат технической поддержки. Клиент: {username}</Card.Title>
+        <Card.Title> Чат технической поддержки. Клиент: {socket.current.username}</Card.Title>
         <Card.Body className="m-0 pt-0 h-100 pb-1">     
         <Container className="h-75  h-md-50  flex-column-reverse overflow-auto align-items-end d-flex m-3 mx-0 rounded-50 neo">
                 {messages.map((mess,index) =>
@@ -176,14 +185,14 @@ const AdminChatWindow = observer((props) => {
                 style= {mess.from === 'admin'? {borderRadius:'50px', backgroundColor: 'rgb(170, 255, 128)'} : {borderRadius:'50px', backgroundColor: 'rgb(179, 217, 255)'}}
                 key={index} 
                 className={mess.from === 'admin'? " align-self-end neo mb-2 p-2 px-5" :  "mb-2 p-2 px-5 neo  align-self-start"}>
-                    <Row className="text-muted">
+                    <Box className="text-muted">
                         {mess.from === 'client'? `${mess.username }` : `${mess.adminname}`} 
-                    </Row>
-                    <Row style={{maxWidth:'500px'}}>
+                    </Box>
+                    <Box style={{maxWidth:'500px'}}>
                         {mess.event === "adminEnter" ?
                         `Администратор ${mess.adminname} подключился`:
                         mess.message}
-                    </Row>
+                    </Box>
                 </Box>
                 
                 
