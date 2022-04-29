@@ -7,7 +7,7 @@ export const fetchAllTypes = async () => {
     return data;
 }
 
-export const fetchTypes = async (page, limit = 9) => {
+export const fetchTypes = async (page, limit = 10) => {
     const { data } = await $host.get('api/type', {
         params: {
             page, limit
@@ -39,7 +39,7 @@ export const createBrand = async (brand) => {
 }
 
 
-export const fetchBrands = async (page, limit = 9) => {
+export const fetchBrands = async (page, limit = 10) => {
     const { data } = await $host.get('api/brand', {
         params: {
             page, limit
@@ -109,7 +109,7 @@ export const createRating = async (rating) => {
     return data
 }
 
-export const fetchRatings = async (page, limit = 9) => {
+export const fetchRatings = async (page, limit = 10) => {
     const { data } = await $host.get('api/rating', {
         params: {
             page, limit
@@ -146,7 +146,7 @@ export const createBasketDevice = async (basketDevice) => {
     return data
 }
 
-export const fetchBasketDevices = async (page, limit = 9) => {
+export const fetchBasketDevices = async (page, limit = 10) => {
     const { data } = await $host.get('api/basketdevice', {
         params: {
             page, limit
@@ -154,6 +154,22 @@ export const fetchBasketDevices = async (page, limit = 9) => {
     })
     return data
 }
+
+export const fetchBasketDevicesByUser = async (page, limit = 10,userId) => {
+    const { data } = await $host.get(`api/basketdevice/${userId}/list`, {
+        params: {
+            page, limit
+        }
+    })
+    return data
+}
+
+export const fetchAllBasketDeviceByUser = async (userId) => {
+    const { data } = await $authHost.get(`api/basketdevice/${userId}/all`)
+    return data
+}
+
+
 
 export const updateOneBasketDevice = async (basketdevice,id) => {
     const { data } = await $authHost.post('api/basketdevice/' + id,basketdevice)

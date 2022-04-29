@@ -14,12 +14,7 @@ const BasketDeviceTable = observer(() =>
         const {basketDevice} = useContext(Context)
 
 
-        useEffect(() =>
-        {
-            getBasketDevices()
-        }
-    
-        ,[])
+      
     
         useEffect(() =>
         {

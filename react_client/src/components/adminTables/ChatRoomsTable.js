@@ -18,12 +18,7 @@ const ChatRoomsTable = observer(() =>
         const {finished,setFinished} = useState(false)
         const navigate = useNavigate ();
 
-        useEffect(() =>
-        {
-            getChatRooms()
-        }
-    
-        ,[finished,])
+        
     
         useEffect(() =>
         {

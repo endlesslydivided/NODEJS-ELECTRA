@@ -6,6 +6,7 @@ import {createDevice, fetchAllBrands, fetchDevices, fetchAllTypes} from "../../.
 import {observer} from "mobx-react-lite";
 import {Button} from "@mui/material";
 
+
 const CreateDevice = observer(({show, onHide}) => {
     const {device} = useContext(Context)
     const [name, setName] = useState('')

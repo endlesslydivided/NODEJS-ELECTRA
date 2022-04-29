@@ -19,12 +19,7 @@ const TypeTable = observer(() =>
         const {device} = useContext(Context)
 
 
-        useEffect(() =>
-        {
-            getTypes()
-        }
-    
-        ,[])
+
     
         useEffect(() =>
         {

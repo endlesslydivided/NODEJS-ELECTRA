@@ -17,7 +17,15 @@ export const auhtRoutes =
     {
         path : BASKET_ROUTE,
         Component: Basket
-    }
+    },
+    {
+        path : INTO_CHAT_ROUTE,
+        Component: UserChat
+    },
+    {
+        path : INTO_CHAT_ROUTE + '/:id',
+        Component: UserChat
+    },
 ]
 
 
@@ -41,14 +49,6 @@ export const publicRoutes =
     {
         path : DEVICE_ROUTE + '/:id',
         Component: DevicePage
-    },
-    {
-        path : INTO_CHAT_ROUTE,
-        Component: UserChat
-    },
-    {
-        path : INTO_CHAT_ROUTE + '/:id',
-        Component: UserChat
-    },
+    }
 
 ]

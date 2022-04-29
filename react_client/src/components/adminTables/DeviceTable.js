@@ -20,10 +20,7 @@ const DeviceTable = observer(() =>
 
         const {device} = useContext(Context)
 
-        useEffect(() =>
-        {
-            getDevices();   
-        },[])
+     
     
         useEffect(() =>
         {

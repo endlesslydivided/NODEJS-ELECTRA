@@ -18,12 +18,7 @@ const BrandTable = observer(() =>
         const {device} = useContext(Context)
 
 
-        useEffect(() =>
-        {
-            getBrands()
-        }
-    
-        ,[])
+      
     
         useEffect(() =>
         {

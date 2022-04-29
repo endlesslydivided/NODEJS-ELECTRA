@@ -81,3 +81,12 @@
     
     
 }
+.MuiPagination-root {
+    display: flex;
+    justify-content: center;
+}
+
+.css-1d6wzja-MuiButton-startIcon.MuiButton-startIcon
+{
+    margin: 0;
+}

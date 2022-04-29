@@ -15,12 +15,7 @@ const RatingTable = observer(() =>
         const {device} = useContext(Context)
 
 
-        useEffect(() =>
-        {
-            getRatings()
-        }
-    
-        ,[])
+      
     
         useEffect(() =>
         {

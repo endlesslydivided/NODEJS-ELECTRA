@@ -3,7 +3,7 @@ import { Context } from "../index";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
-import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE,INTO_CHAT_ROUTE } from "../utils/consts";
+import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE,INTO_CHAT_ROUTE,BASKET_ROUTE } from "../utils/consts";
 import { Button } from "react-bootstrap";
 import { observer } from "mobx-react-lite";
 import Container from "react-bootstrap/Container";
@@ -279,6 +279,12 @@ const NavBar = observer(() => {
                             </Button>
                             <Button
                                 variant={"outline-light"}
+                                onClick={() => navigate(BASKET_ROUTE)}
+                            >
+                                Корзина
+                            </Button>
+                            <Button
+                                variant={"outline-light"}
                                 className="ml-2"
                                 onClick={() => logOut()}
                             >
@@ -298,13 +304,13 @@ const NavBar = observer(() => {
                             </div>
 
                         }   
-                        </Nav>
+                    </Nav>
 
                         :
 
-                        <Nav className="ml-auto" style={{ color: 'white' }}>
-                            <Button variant={"outline-light"} onClick={() => navigate(LOGIN_ROUTE)}>Авторизация</Button>
-                        </Nav>
+                    <Nav className="ml-auto" style={{ color: 'white' }}>
+                        <Button variant={"outline-light"} onClick={() => navigate(LOGIN_ROUTE)}>Авторизация</Button>
+                    </Nav>
 
                 }
             </Container>

@@ -1,4 +1,4 @@
-const {BasketDevice} = require('../models/models');
+const {BasketDevice,Device, Brand} = require('../models/models');
 const ApiError = require('../error/ApiError');
 
 class BasketDeviceController
@@ -27,6 +27,52 @@ class BasketDeviceController
         let basketDevices;
 
         basketDevices  = await BasketDevice.findAndCountAll({limit,offset});
+        return response.json(basketDevices);
+        
+    }
+
+    async getAllListByUser(request,response)
+    {
+        
+        let {limit,page} = request.query;
+        let {id} = request.params;
+
+        page = page || 1;
+        limit = limit || 9;
+        let offset = page * limit - limit;
+        let basketDevices;
+
+        basketDevices  = await BasketDevice.findAndCountAll(
+            {
+                limit,
+                offset,
+                where:
+                {
+                    userId:id
+                },
+                include : [{all: true, nested: true }]
+
+            });
+        return response.json(basketDevices);
+        
+    }
+
+    async getAllByUser(request,response)
+    {
+        
+        let {id} = request.params;
+
+        let basketDevices  = await BasketDevice.findAll(
+        {
+            where:
+            {
+                userId :id,               
+            },
+        
+            include : [{model: Device,as: 'device'}]
+        });
+
+
         return response.json(basketDevices);
         
     }
