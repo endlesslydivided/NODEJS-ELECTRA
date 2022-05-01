@@ -5,6 +5,7 @@ import {SHOP_ROUTE} from "../utils/consts";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 import Shop from "../pages/Shop";
+import ErrorPage from '../pages/ErrorPage';
 
 const AppRouter = observer(() => {
 
@@ -23,7 +24,7 @@ const AppRouter = observer(() => {
           <Route key={path} path={path} element={<Component/>} exact/>
         )
       }
-
+      <Route path="*"  element={<ErrorPage/>} />
     </Routes>
   )
 });

@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import {Container, Form} from "react-bootstrap";
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
+import {Button} from "@mui/material";
 import Row from "react-bootstrap/Row";
 import {NavLink, useLocation, useNavigate } from "react-router-dom";
 import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE} from "../utils/consts";
@@ -10,7 +10,7 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 
 const Auth = observer(() => {
-    const {user} = useContext(Context)
+    const {user,errorResult} = useContext(Context)
     const location = useLocation()
     const navigate = useNavigate ()
     const isLogin = location.pathname === LOGIN_ROUTE
@@ -18,8 +18,7 @@ const Auth = observer(() => {
     const [password, setPassword] = useState('')
 
     const click = async () => {
-        try 
-        {
+     
             let data;
             if (isLogin) 
             {
@@ -31,12 +30,7 @@ const Auth = observer(() => {
             user.setUser(data)
             user.setIsAuth(true)
             navigate(SHOP_ROUTE)
-        } 
-        catch (e) 
-        {
-            alert(e.response.data.message)
-        }
-
+    
     }
 
     return (
@@ -44,7 +38,7 @@ const Auth = observer(() => {
             className="d-flex justify-content-center align-items-center"
             style={{height: window.innerHeight - 54}}
         >
-            <Card style={{width: 600}} className="p-5">
+            <Card style={{width: 600}} className="p-5 neo">
                 <h2 className="m-auto">{isLogin ? 'Авторизация' : "Регистрация"}</h2>
                 <Form className="d-flex flex-column">
                     <Form.Control
@@ -60,7 +54,7 @@ const Auth = observer(() => {
                         onChange={e => setPassword(e.target.value)}
                         type="password"
                     />
-                    <Row className="d-flex justify-content-between mt-3 pl-3 pr-3">
+                    <Row className="d-flex justify-content-between mt-2 pl-3 pr-3">
                         {isLogin ?
                             <div>
                                 Нет аккаунта? <NavLink to={REGISTRATION_ROUTE}>Зарегистрируйся!</NavLink>
@@ -71,8 +65,10 @@ const Auth = observer(() => {
                             </div>
                         }
                         <Button
-                            variant={"outline-success"}
+                            color={"secondary"}
+                            variant="contained"
                             onClick={click}
+                            className="mt-2 neo"
                         >
                             {isLogin ? 'Войти' : 'Регистрация'}
                         </Button>

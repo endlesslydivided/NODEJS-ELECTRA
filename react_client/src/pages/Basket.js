@@ -42,7 +42,7 @@ const Basket = observer(() => {
   }
  
   
-  return (<Container className="mt-4  mx-3 mx-sm-auto glass-light p-3 ">
+  return (<Container className="my-4  mx-3 mx-sm-auto glass-light p-3 ">
     <Row className=" align-items-center">
       <Col md={8}   >
         <BasketTable />

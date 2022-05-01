@@ -1,7 +1,6 @@
 import React, {useEffect, useState,useContext} from 'react';
 import { Context } from "../index";
 import {Button, Card, Col, Container, Image, Row} from "react-bootstrap";
-import star from '../assets/star.png'
 import {useParams} from 'react-router-dom'
 import {fetchOneDevice,fetchOneBrand,fetchAllRatingsByDevice, createBasketDevice, createRating} from "../http/deviceAPI";
 import { Typography } from '@mui/material';

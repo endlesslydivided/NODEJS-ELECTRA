@@ -9,6 +9,7 @@ import UserStore from './store/UserStore';
 import TypeStore from './store/TypeStore';
 import RatingStore from './store/RatingStore';
 import BasketDeviceStore from './store/BasketDeviceStore'; 
+import ResultStore from './store/ResultStore'; 
 import "./pages/css/index.css"
 import ChatRoomsStore from './store/ChatRoomsStore';
 export const Context = createContext(null);
@@ -22,8 +23,12 @@ root.render(
     type: new TypeStore(),
     rating: new RatingStore(),
     basketDevice: new BasketDeviceStore(),
-    chatRoom: new ChatRoomsStore()
+    chatRoom: new ChatRoomsStore(),
+    errorResult: new ResultStore(),
+    successResult: new ResultStore(),
+
   }}>
+    
     <App className="gradientBackground"/>
   </Context.Provider>
 )
