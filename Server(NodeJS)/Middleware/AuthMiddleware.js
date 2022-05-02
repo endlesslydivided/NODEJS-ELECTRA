@@ -2,23 +2,22 @@ const jwt = require('jsonwebtoken')
 
 module.exports = function(request,response,next)
 {
-    // if(request.method = "OPTIONS")
-    // {
-    //     return next();
-    // }
-    try
-    {
-        const token = request.headers.authorization.split(' ')[1];
-        if(!token)
+
+        try
         {
-            return response.status(401).json({message:"Пользователь не авторизован"})
+            const token = request.headers.authorization.split(' ')[1];
+            if(!token)
+            {
+                next(ApiError.notAuthorized("Неавторизованный доступ"));
+    
+            }
+            const decoded = jwt.verify(token,process.env.SECRET_KEY);
+            request.user = decoded;
+            next();
         }
-        const decoded = jwt.verify(token,process.env.SECRET_KEY);
-        request.user = decoded;
-        next();
-    }
-    catch(error)
-    {
-        return response.status(401).json({message:"Пользователь не авторизован"})
-    }
+        catch(error)
+        {
+            next(ApiError.notAuthorized("Неавторизованный доступ"));
+        }
+       
 }

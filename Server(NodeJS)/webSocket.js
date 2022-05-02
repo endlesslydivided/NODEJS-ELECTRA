@@ -25,11 +25,21 @@ const leave = (room,userId) =>
         delete rooms[room][userId];
   };
 
+// const checkTimeOut = setInterval(() =>
+// {
+//     let del = false;
+//     Object.entries(rooms).forEach((room) =>
+//     {
+//         Object.entries(room).forEach(([, sock]) =>
+//         {
+//             if(Date.now() - )
+//         }
+//         )
+//     })
+// },10000)
+
 wss.on('connection', function connection(ws)
 {
-
-    
-
     ws.on('message',async function receiveMessage(message)
     {
         messageIn = JSON.parse(message);

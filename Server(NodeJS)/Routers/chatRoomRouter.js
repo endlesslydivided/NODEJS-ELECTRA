@@ -1,9 +1,11 @@
 const Router = require('express');
 const chatRoomController = require('../Controllers/chatRoomController');
 const router = new Router();
+const authMiddleware = require("../Middleware/AuthMiddleware")
+const checkRole = require("../Middleware/CheckRoleMiddleware")
 
-router.get('/',chatRoomController.getAllList)
-router.get('/:id',chatRoomController.getOne)
+router.get('/',checkRole('ADMIN'),chatRoomController.getAllList)
+router.get('/:id',checkRole('ADMIN'),chatRoomController.getOne)
 
 
 

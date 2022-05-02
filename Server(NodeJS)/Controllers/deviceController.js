@@ -15,7 +15,10 @@ class DeviceController
 
             let fileName = uuid.v4() + `.jpg`;
             img.mv(path.resolve(__dirname,'..','Static',fileName));
-            const device = await Device.create({name,price,brandId,typeId,image: fileName});
+            const device = await Device.create({name,price,brandId,typeId,image: fileName}).catch((error) => 
+            {            
+                next(ApiError.internal(error.message));
+            });
 
 
             if(info)
@@ -92,11 +95,11 @@ class DeviceController
         }
         catch(error)
         {
-            next(ApiError.badRequest(error.message));
+            next(ApiError.internal(error.message));
         }
     }
 
-    async getAllList(request,response)
+    async getAllList(request,response,next)
     {
         let {brandId,typeId,limit,sendRating,page} = request.query;
 
@@ -147,12 +150,12 @@ class DeviceController
         }
         catch (error)
         {
-            console.log(error);
+            next(ApiError.internal(error.message));
         }
         return response.json(devices);
     }
 
-    async getOne(request,response)
+    async getOne(request,response,next)
     {
         const {id} = request.params;
         const device = await Device.findOne(
@@ -160,7 +163,10 @@ class DeviceController
                 where:{id},
                 include : [{model: DeviceInfo,as: 'info'}]
             }
-        )
+        ).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        })
         
         return response.json(device);
     }
@@ -172,7 +178,10 @@ class DeviceController
             {
                 where:{id}
             }
-        )
+        ).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        })
         
         return response.json(device);
     }

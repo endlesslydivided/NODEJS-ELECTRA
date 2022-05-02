@@ -3,14 +3,17 @@ const ApiError = require('../error/ApiError');
 
 class TypeController
 {
-    async create(request,response)
+    async create(request,response,next)
     {
         const {name} = request.body;
-        const type = await Type.create({name});
+        const type = await Type.create({name}).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         return response.json(type);
     }
 
-    async getAllList(request,response)
+    async getAllList(request,response,next)
     {
         let {limit,page} = request.query;
 
@@ -19,36 +22,48 @@ class TypeController
         let offset = page * limit - limit;
         let types;
 
-        types  = await Type.findAndCountAll({limit,offset});
+        types  = await Type.findAndCountAll({limit,offset}).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         return response.json(types);
     }
 
-    async getAll(request,response)
+    async getAll(request,response,next)
     {
-        const types  = await Type.findAll();
+        const types  = await Type.findAll().catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         return response.json(types);
     }
 
-    async delete(request,response)
+    async delete(request,response,next)
     {
         const {id} = request.params;
         const type = await Type.destroy(
             {
                 where:{id}
             }
-        )
+        ).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         
         return response.json(type);
     }
 
-    async getOne(request,response)
+    async getOne(request,response,next)
     {
         const {id} = request.params;
         const type = await Type.findOne(
             {
                 where:{id}
             }
-        )
+        ).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         
         return response.json(type);
     }

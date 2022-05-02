@@ -20,9 +20,9 @@ const AxiosInterceptor = ({ children }) => {
 
     useEffect(() => {
 
-        const authInterceptor = config => {
-            config.headers.authorization = `Bearer ${localStorage.getItem('token')}`
-            return config
+        const authInterceptor = request => {
+            request.headers.authorization = `Bearer ${localStorage.getItem('token')}`;
+            return request;
         }
 
         const resInterceptor = response => 
@@ -67,9 +67,7 @@ const AxiosInterceptor = ({ children }) => {
 
         return () => 
         {
-            $authHost.interceptors.request.eject(authRequestInterceptor);
-            $authHost.interceptors.response.eject(authResponseInterceptor);
-            $host.interceptors.response.eject(ResponseInterceptor);
+            
 
         }
 

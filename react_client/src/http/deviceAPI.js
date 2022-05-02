@@ -110,7 +110,7 @@ export const createRating = async (rating) => {
 }
 
 export const fetchRatings = async (page, limit = 10) => {
-    const { data } = await $host.get('api/rating', {
+    const { data } = await $authHost.get('api/rating', {
         params: {
             page, limit
         }
@@ -147,7 +147,7 @@ export const createBasketDevice = async (basketDevice) => {
 }
 
 export const fetchBasketDevices = async (page, limit = 10) => {
-    const { data } = await $host.get('api/basketdevice', {
+    const { data } = await $authHost.get('api/basketdevice', {
         params: {
             page, limit
         }
@@ -156,7 +156,7 @@ export const fetchBasketDevices = async (page, limit = 10) => {
 }
 
 export const fetchBasketDevicesByUser = async (page, limit = 10,userId) => {
-    const { data } = await $host.get(`api/basketdevice/${userId}/list`, {
+    const { data } = await $authHost.get(`api/basketdevice/${userId}/list`, {
         params: {
             page, limit
         }
@@ -177,7 +177,7 @@ export const updateOneBasketDevice = async (basketdevice,id) => {
 }
 
 export const fetchOneBasketDevice = async (id) => {
-    const { data } = await $host.get('api/basketdevice/' + id)
+    const { data } = await $authHost.get('api/basketdevice/' + id)
     return data
 }
 

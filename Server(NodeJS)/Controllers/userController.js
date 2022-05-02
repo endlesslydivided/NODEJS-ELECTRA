@@ -46,8 +46,17 @@ class UserController {
     }
 
     async check(req, res, next) {
+        let token;
+        try
+        {
+             token = generateJwt(req.user.id, req.user.email, req.user.role)
 
-        const token = generateJwt(req.user.id, req.user.email, req.user.role)
+        }
+        catch(error)
+        {
+            next(ApiError.notAuthorized(error.message));
+
+        }
         return res.json({token})
     }
 
@@ -61,7 +70,10 @@ class UserController {
         let offset = page * limit - limit;
         let users;
 
-        users  = await User.findAndCountAll({limit,offset});
+        users  = await User.findAndCountAll({limit,offset}).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });;
         return response.json(users);
         
     }

@@ -3,21 +3,27 @@ const ApiError = require('../error/ApiError');
 
 class RatingController
 {
-    async create(request,response)
+    async create(request,response,next)
     {
         const {userId,deviceId,rate} = request.body;
-        const rating = await Rating.create({userId,deviceId,rate});
+        const rating = await Rating.create({userId,deviceId,rate}).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         return response.json(rating);
     }
 
-    async getAll(request,response)
+    async getAll(request,response,next)
     {
-        const ratings = await Rating.findAll();
+        const ratings = await Rating.findAll().catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         return response.json(ratings);
     }
 
     
-    async getAllByDevice(request,response)
+    async getAllByDevice(request,response,next)
     {
         let {deviceId} = request.params;
 
@@ -26,11 +32,14 @@ class RatingController
                 where:{deviceId},
                 include : [{model: Device,as: 'device'}]
             }
-        )
+        ).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         return response.json(ratings);
     }
 
-    async getAllList(request,response)
+    async getAllList(request,response,next)
     {
         
         let {limit,page} = request.query;
@@ -45,7 +54,7 @@ class RatingController
         
     }
 
-    async getOne(request,response)
+    async getOne(request,response,next)
     {
         const {id} = request.params;
         const rating = await Rating.findOne(
@@ -57,7 +66,7 @@ class RatingController
         return response.json(rating);
     }
 
-    async delete(request,response)
+    async delete(request,response,next)
     {
         const {id} = request.params;
         const rating = await Rating.destroy(

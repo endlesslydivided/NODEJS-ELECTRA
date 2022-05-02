@@ -3,14 +3,17 @@ const ApiError = require('../error/ApiError');
 
 class BrandController
 {
-    async create(request,response)
+    async create(request,response,next)
     {
         const {name} = request.body;
-        const brand = await Brand.create({name});
+        const brand = await Brand.create({name}).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         return response.json(brand);
     }
 
-    async getAllList(request,response)
+    async getAllList(request,response,next)
     {
         
         let {limit,page} = request.query;
@@ -20,37 +23,49 @@ class BrandController
         let offset = page * limit - limit;
         let brands;
 
-        brands  = await Brand.findAndCountAll({limit,offset});
+        brands  = await Brand.findAndCountAll({limit,offset}).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         return response.json(brands);
         
     }
 
-    async getAll(request,response)
+    async getAll(request,response,next)
     {
-        const brands  = await Brand.findAll();
+        const brands  = await Brand.findAll().catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         return response.json(brands);
     }
 
-    async delete(request,response)
+    async delete(request,response,next)
     {
         const {id} = request.params;
         const brand = await Brand.destroy(
             {
                 where:{id}
             }
-        )
+        ).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         
         return response.json(brand);
     }
 
-    async getOne(request,response)
+    async getOne(request,response,next)
     {
         const {id} = request.params;
         const brand = await Brand.findOne(
             {
                 where:{id}
             }
-        )
+        ).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         
         return response.json(brand);
     }

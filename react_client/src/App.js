@@ -12,11 +12,13 @@ import AlertTitle from '@mui/material/AlertTitle';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import options from './assets/config.json'
 import {AxiosInterceptor} from './http/index'
+import { MAIN_ROUTE } from './utils/consts';
 const  App = observer(() =>
 {
   const {user,errorResult,successResult} = useContext(Context)
@@ -42,13 +44,17 @@ const  App = observer(() =>
       })
       .catch(error =>
         {
-          
-          errorResult.setMessage(error.response.message)
-          user.setUser({})
-          user.setIsAuth(false)
+          if(error.response.status === 505)
+          errorResult.setMessage('Ошибка сервера!')
+          if(error.response.status !== 401)
+          {
+            user.setUser({})
+            user.setIsAuth(false)
+          }
+         
         }
       ).finally(() => setLoading(false))
-  })
+  },[])
   
   useEffect(() =>
   {
@@ -70,10 +76,10 @@ const  App = observer(() =>
     console.log(main);
     await loadFull(main);
   };
-  
+    
 
   if(loading)
-  {
+  { 
       return (
       <div className=" d-flex align-items-center h-100 justify-content-center">
         <Spinner  variant="light" animation={"border"}/>

@@ -4,7 +4,7 @@ const {ChatRoom} = require('../models/models');
 
 class ChatRoomController
 {
-    async getAllList(request,response)
+    async getAllList(request,response,next)
     {
         
         let {limit,page} = request.query;
@@ -20,6 +20,9 @@ class ChatRoomController
 
             offset: offset,
             limit: limit,
+          }).catch((error) => 
+          {            
+              next(ApiError.internal(error.message));
           });
         
         return response.json(chatRooms);
@@ -27,14 +30,17 @@ class ChatRoomController
         
     }
 
-    async getOne(request,response)
+    async getOne(request,response,next)
     {
         const {id} = request.params;
         const chatRoom = await ChatRoom.findOne(
             {
                 where:{id}
             }
-        )
+        ).catch((error) => 
+        {            
+            next(ApiError.internal(error.message));
+        });
         
         return response.json(chatRoom);
     }

@@ -1,15 +1,16 @@
 const Router = require('express');
 const basketDeviceController = require('../Controllers/basketDeviceController');
 const router = new Router();
+const authMiddleware = require("../Middleware/AuthMiddleware")
+const checkRole = require("../Middleware/CheckRoleMiddleware")
 
-
-router.post('/',basketDeviceController.create)
-router.delete('/',basketDeviceController.delete)
-router.get('/all',basketDeviceController.getAll)
-router.get('/',basketDeviceController.getAllList)
-router.get('/:id',basketDeviceController.getOne)
-router.get('/:id/all',basketDeviceController.getAllByUser)
-router.get('/:id/list',basketDeviceController.getAllListByUser)
+router.post('/',checkRole('USER'),basketDeviceController.create)
+router.delete('/',checkRole('USER'),basketDeviceController.delete)
+router.get('/all',checkRole('ADMIN'),basketDeviceController.getAll)
+router.get('/',checkRole('ADMIN'),basketDeviceController.getAllList)
+router.get('/:id',checkRole('ADMIN'),basketDeviceController.getOne)
+router.get('/:id/all',checkRole('USER'),basketDeviceController.getAllByUser)
+router.get('/:id/list',checkRole('USER'),basketDeviceController.getAllListByUser)
 
 
 module.exports = router;

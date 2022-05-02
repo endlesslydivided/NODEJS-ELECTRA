@@ -12,10 +12,7 @@ import {ADMIN_ROUTE,BASKET_ROUTE, DEVICE_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE,
 
 export const auhtRoutes = 
 [
-    {
-        path : ADMIN_ROUTE,
-        Component: Admin
-    },
+    
     {
         path : BASKET_ROUTE,
         Component: Basket
@@ -23,11 +20,19 @@ export const auhtRoutes =
     {
         path : INTO_CHAT_ROUTE,
         Component: UserChat
+    }
+]
+
+export const auhtAdminRoutes =
+[
+    {
+        path : ADMIN_ROUTE,
+        Component: Admin
     },
     {
         path : INTO_CHAT_ROUTE + '/:id',
         Component: UserChat
-    },
+    }
 ]
 
 

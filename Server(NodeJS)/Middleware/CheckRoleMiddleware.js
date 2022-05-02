@@ -1,32 +1,29 @@
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const ApiError = require('../error/ApiError');
 
 module.exports = function(role) 
 {
     return function (request, response, next) 
     {
-        if (request.method === "OPTIONS") 
-        {
-            return next()
-        }
         
         try 
         {
-            const token = request.headers.authorization.split(' ')[1] // Bearer asfasnfkajsfnjk
+            const token = request.headers.authorization.split(' ')[1] 
             if (!token) 
             {
-                return response.status(401).json({message: "Не авторизован"})
+                next(ApiError.notAuthorized("Неавторизованный доступ"));
             }
             const decoded = jwt.verify(token, process.env.SECRET_KEY)
             if (decoded.role !== role) 
             {
-                return response.status(403).json({message: "Нет доступа"})
+                next(ApiError.notAuthorized("Недостаточно прав"));
             }
             request.user = decoded;
             return next()
         } 
         catch (e) 
         {
-            return response.status(401).json({message: "Не авторизован"})
+            next(ApiError.notAuthorized("Неавторизованный доступ"));
         }
     };
 }
