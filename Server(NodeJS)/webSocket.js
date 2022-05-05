@@ -1,19 +1,7 @@
 const ws = require('ws');
 const {ChatRoom} = require('./models/models');
 
-const wss = new ws.Server(
-    {
-        port: 5001
-    },
-    () => 
-    {
-        console.log('WS-server started on 5001')
-    }
-)
-
 let rooms = {};
-
-
 
 const leave = (room,userId) => 
 {
@@ -25,20 +13,28 @@ const leave = (room,userId) =>
         delete rooms[room][userId];
   };
 
-// const checkTimeOut = setInterval(() =>
-// {
-//     let del = false;
-//     Object.entries(rooms).forEach((room) =>
-//     {
-//         Object.entries(room).forEach(([, sock]) =>
-//         {
-//             if(Date.now() - )
-//         }
-//         )
-//     })
-// },10000)
+async function webSocket(expressServer)  
+{
+const websocketServer = new ws.Server(
+    {
+        noServer: true,
+        path :'/websockets'
+    },
+    () => 
+    {
+        console.log('WS-server started on 5001')
+    }
+)
 
-wss.on('connection', function connection(ws)
+expressServer.on("upgrade", (request, socket, head) => 
+{
+    websocketServer.handleUpgrade(request, socket, head, (websocket) => 
+    {
+        websocketServer.emit("connection", websocket, request);
+    });
+});
+
+websocketServer.on('connection', function connection(ws)
 {
     ws.on('message',async function receiveMessage(message)
     {
@@ -153,7 +149,7 @@ wss.on('connection', function connection(ws)
                     {
                         ws.close(3000,'clientOut');
                         leave(messageIn.id,messageIn.userId);
-                         closedAt =  new Date(closedAt).toUTCString();
+                        closedAt =  new Date(closedAt).toUTCString();
                         await ChatRoom.update({closedAt},
                             {where:
                                 {
@@ -166,6 +162,7 @@ wss.on('connection', function connection(ws)
                         ws.close(3001,'adminOut');
                         leave(messageIn.id,messageIn.adminId);
                     }
+                    if(rooms[messageIn.id] != null)
                     Object.entries(rooms[messageIn.id]).forEach(([, sock]) => sock.send(JSON.stringify(messageOut)));
 
                     break;
@@ -175,7 +172,28 @@ wss.on('connection', function connection(ws)
     )
 })
 
-module.exports = wss;
+return websocketServer;
+};
+
+module.exports = {webSocket}
+
+
+
+// const checkTimeOut = setInterval(() =>
+// {
+//     let del = false;
+//     Object.entries(rooms).forEach((room) =>
+//     {
+//         Object.entries(room).forEach(([, sock]) =>
+//         {
+//             if(Date.now() - )
+//         }
+//         )
+//     })
+// },10000)
+
+
+
 
 /* message =
 {

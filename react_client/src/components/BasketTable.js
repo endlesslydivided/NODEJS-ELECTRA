@@ -11,7 +11,7 @@ import {Button} from "@mui/material";
 
 
 
-const BasketTable = observer(() => 
+const BasketTable = observer(({tableCallback}) => 
     {
         
         
@@ -20,22 +20,50 @@ const BasketTable = observer(() =>
         
         useEffect(() =>
         {
-          fetchBasketDevicesByUser(basketDevice.page,basketDevice.limit,user.user.id).then((data)=>
+            fetchBasketDevices();
+        },[basketDevice.page,])
+        
+        const fetchBasketDevices = ()=>
+        {
+            fetchBasketDevicesByUser(basketDevice.page,basketDevice.limit,user.user.id).then((data)=>
           {
               basketDevice.setBasketDevices(data.rows);
               basketDevice.setTotalCount(data.count)
 
           })
-        },[basketDevice.page,])
+        }
     
-      
+        
+        const handleDeleteBasketDevice = async (id) =>
+        {
+            let count = 0;
+            deleteBasketDevice(id).then(() =>
+            {
+                if(user.isAuth && user.user.role !== "ADMIN")
+                {
+                    fetchBasketDevicesByUser(basketDevice.page,basketDevice.limit,user.user.id).then((data)=>
+                    {
+                        basketDevice.setBasketDevices(data.rows);
+                        basketDevice.setTotalCount(data.count);
+                        
+                    })
+                    fetchAllBasketDeviceByUser(user.user.id).then(data => 
+                    {
+                        data.map((bd) => {count +=Number.parseFloat(bd.device.price)});
+                        tableCallback(count);
+                      })
+                }
+                
+            })
+           
+        }
         
         return ( <Container className='p-0 p-sm-0    p-md-0'>      
         <Table striped responsive className={" neo table-light shadow"}>
             
             <thead className={"bg-light"}>
                 <tr>
-                    <th colSpan={3}>Корзина, {basketDevice.basketDevices.length}</th>
+                    <th colSpan={3}>Корзина, {basketDevice.totalCount}</th>
                 
                 </tr>
             </thead>
@@ -50,7 +78,7 @@ const BasketTable = observer(() =>
                         startIcon={<Clear />}
                         variant={"outline-dark"}
                         className="p-0 m-0"
-                        onClick={()=> deleteBasketDevice(basketDeviceItem.id).then(()=>basketDevice.setPage(1))}
+                        onClick={()=> handleDeleteBasketDevice(basketDeviceItem.id).then(()=>basketDevice.setPage(1))}
                         >
                         </Button>
                         </td>
@@ -78,7 +106,7 @@ const BasketTable = observer(() =>
                     totalCount={basketDevice.totalCount}
                     limit={basketDevice.limit}
                     pageO={basketDevice.page}
-                    updateData ={(value) => basketDevice.setPage(value)}
+                    updateData ={(event, value) => basketDevice.setPage(value)}
                 />
              </td>
             </tr>

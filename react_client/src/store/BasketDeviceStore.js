@@ -5,7 +5,7 @@ export default class BasketDeviceStore{
         this._basketDevices = []
         this._page = 1
         this._totalCount = 0
-        this._limit = 10
+        this._limit = 5
         makeAutoObservable(this)
     }
 

@@ -77,7 +77,7 @@ const AdminChatWindow = observer((props) => {
    
     function connect() 
     {
-        socket.current.socket = new WebSocket('ws://localhost:5001')
+        socket.current.socket = new WebSocket('ws://localhost:5000/websockets')
         let message;
         socket.current.socket.onopen = () => 
         {

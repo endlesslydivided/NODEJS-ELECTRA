@@ -72,7 +72,7 @@ const UserChat = observer(() =>
     return (
         <Container
          
-            className="d-flex mt-4  justify-content-center align-items-center"
+            className="d-flex my-3  justify-content-center align-items-center"
             style={{height: window.innerHeight -100, width: window.innertWidth}}
         >
             {

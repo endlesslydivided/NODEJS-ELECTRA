@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const ApiError = require('../error/ApiError');
 
 module.exports = function(request,response,next)
 {
@@ -8,16 +9,16 @@ module.exports = function(request,response,next)
             const token = request.headers.authorization.split(' ')[1];
             if(!token)
             {
-                next(ApiError.notAuthorized("Неавторизованный доступ"));
+                return next(ApiError.notAuthorized("Неавторизованный доступ"));
     
             }
             const decoded = jwt.verify(token,process.env.SECRET_KEY);
             request.user = decoded;
-            next();
+            return next();
         }
         catch(error)
         {
-            next(ApiError.notAuthorized("Неавторизованный доступ"));
+            return next(ApiError.notAuthorized("Неавторизованный доступ"));
         }
        
 }

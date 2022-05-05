@@ -11,19 +11,19 @@ module.exports = function(role)
             const token = request.headers.authorization.split(' ')[1] 
             if (!token) 
             {
-                next(ApiError.notAuthorized("Неавторизованный доступ"));
+                return next(ApiError.notAuthorized("Неавторизованный доступ"));
             }
             const decoded = jwt.verify(token, process.env.SECRET_KEY)
             if (decoded.role !== role) 
             {
-                next(ApiError.notAuthorized("Недостаточно прав"));
+                return next(ApiError.notAuthorized("Недостаточно прав"));
             }
             request.user = decoded;
             return next()
         } 
         catch (e) 
         {
-            next(ApiError.notAuthorized("Неавторизованный доступ"));
+            return next(ApiError.notAuthorized("Неавторизованный доступ"));
         }
     };
 }

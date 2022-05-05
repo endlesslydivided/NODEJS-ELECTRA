@@ -45,8 +45,7 @@ const UserChatWindow = observer((props) => {
         window.onbeforeunload =  ()=>
         {
 
-             beforeExit();
-
+            beforeExit();
             setAdminName('');
             socket.current.adminId =0;
             socket.current.userState ='wait';
@@ -80,7 +79,7 @@ const UserChatWindow = observer((props) => {
 
     function connect() 
     {
-        socket.current.socket = new WebSocket('ws://localhost:5001')
+        socket.current.socket = new WebSocket('ws://localhost:5000/websockets')
         let message;
         socket.current.socket.onopen = () => 
         {
@@ -194,7 +193,7 @@ const UserChatWindow = observer((props) => {
     }
 
   return (
-    <Card className="p-4 w-100 h-100 ">
+    <Card className="p-4 w-100 h-100  ">
         <Card.Title> Чат технической поддержки. Администратор: {adminname? adminname: `(ожидание администратора...)`}</Card.Title>
         <Card.Body className="m-0 pt-0 h-100 pb-1">     
         <Container className="h-75  h-md-50  flex-column-reverse overflow-auto align-items-end d-flex m-3 mx-0 rounded-25 shadow">

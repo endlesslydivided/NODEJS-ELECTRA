@@ -13,7 +13,7 @@
   "interactivity": {
     "events": {
       "onClick": {
-        "enable": true,
+        "enable": false,
         "mode": "push"
       },
       "onHover": {
@@ -40,7 +40,7 @@
       "repulse": {
         "divs": {
           "distance": 200,
-          "duration": 0.4,
+          "duration": 0.1,
           "factor": 100,
           "speed": 1,
           "maxSpeed": 50,
@@ -53,20 +53,26 @@
       }
     }
   },
-  "particles": {
-    "color": {
+  "particles": 
+  {
+    "color": 
+    {
       "value": "#ffffff"
     },
-    "links": {
-      "color": {
+    "links": 
+    {
+      "color": 
+      {
         "value": "#ffffff"
       },
       "distance": 150,
       "enable": true,
-      "opacity": 0.4
+      "opacity": 0.5
     },
-    "move": {
-      "attract": {
+    "move": 
+    {
+      "attract": 
+      {
         "rotate": {
           "x": 600,
           "y": 1200
@@ -87,10 +93,10 @@
       "density": {
         "enable": true
       },
-      "value": 40
+      "value": 30
     },
     "opacity": {
-      "value": 0.5,
+      "value": 0.2,
       "animation": {
         "speed": 50,
         "minimumValue": 0
@@ -105,7 +111,7 @@
         "max": 4
       },
       "animation": {
-        "speed": 40,
+        "speed": 80,
         "minimumValue": 0.1
       }
     }

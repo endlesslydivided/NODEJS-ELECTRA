@@ -142,7 +142,7 @@ const Rating = sequelize.define('rating',
     },
     rate:
     {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
         unique: false,
         allowNull: false
     }

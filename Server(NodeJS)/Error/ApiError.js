@@ -8,6 +8,11 @@ class ApiError extends Error{
 
     static badRequest(message)
     {
+        return new ApiError(400,message);
+    }
+
+    static notFound(message)
+    {
         return new ApiError(404,message);
     }
 
@@ -25,5 +30,11 @@ class ApiError extends Error{
     {
         return new ApiError(401,message);
     }
+
+    static [Symbol.hasInstance](obj) 
+    {
+        return true;
+    }
+
 }
 module.exports = ApiError;

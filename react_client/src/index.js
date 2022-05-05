@@ -12,10 +12,14 @@ import BasketDeviceStore from './store/BasketDeviceStore';
 import ResultStore from './store/ResultStore'; 
 import "./pages/css/index.css"
 import ChatRoomsStore from './store/ChatRoomsStore';
+import {AxiosInterceptor} from './http/index'
+import {BrowserRouter} from "react-router-dom";
+
 export const Context = createContext(null);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+
   <Context.Provider value={{
     user : new UserStore(),
     device: new DeviceStore(),
@@ -28,8 +32,14 @@ root.render(
     successResult: new ResultStore(),
 
   }}>
-    
-    <App className="gradientBackground"/>
+        <BrowserRouter>
+
+          <AxiosInterceptor>
+            <App className="gradientBackground"/>
+          </AxiosInterceptor>
+        </BrowserRouter>
+
   </Context.Provider>
+
 )
 

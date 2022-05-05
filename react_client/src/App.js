@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {BrowserRouter} from "react-router-dom";
 import AppRouter from "./components/AppRouter";
 import Header from "./components/Header";
 import {observer} from "mobx-react-lite";
@@ -17,7 +16,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import options from './assets/config.json'
-import {AxiosInterceptor} from './http/index'
 import { MAIN_ROUTE } from './utils/consts';
 const  App = observer(() =>
 {
@@ -40,13 +38,14 @@ const  App = observer(() =>
       {
         user.setUser(data)
         user.setIsAuth(true)
-
+        setOpenWarning(false)
+        errorResult.setMessage(null)
       })
       .catch(error =>
         {
-          if(error.response.status === 505)
+          if(error.response.status === 500)
           errorResult.setMessage('Ошибка сервера!')
-          if(error.response.status !== 401)
+          if(error.response.status === 401)
           {
             user.setUser({})
             user.setIsAuth(false)
@@ -87,9 +86,7 @@ const  App = observer(() =>
   }
 
   return (
-    <BrowserRouter>
-        <AxiosInterceptor>
-
+    <>
       <Particles id="tsparticles" options={options} init={particlesInit}/>
 
       <Collapse className='position-fixed' style={alertStyle} in={openWarning}>
@@ -127,12 +124,10 @@ const  App = observer(() =>
       <Header/>
       <AppRouter/>
 
-      <Footer/>
+      <Footer />
+      </>
 
 
-      </AxiosInterceptor>
-
-    </BrowserRouter>
   );
 });
 

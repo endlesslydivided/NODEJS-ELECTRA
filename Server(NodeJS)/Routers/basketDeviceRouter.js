@@ -5,7 +5,7 @@ const authMiddleware = require("../Middleware/AuthMiddleware")
 const checkRole = require("../Middleware/CheckRoleMiddleware")
 
 router.post('/',checkRole('USER'),basketDeviceController.create)
-router.delete('/',checkRole('USER'),basketDeviceController.delete)
+router.delete('/:id',checkRole('USER'),basketDeviceController.delete)
 router.get('/all',checkRole('ADMIN'),basketDeviceController.getAll)
 router.get('/',checkRole('ADMIN'),basketDeviceController.getAllList)
 router.get('/:id',checkRole('ADMIN'),basketDeviceController.getOne)

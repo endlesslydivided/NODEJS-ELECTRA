@@ -1,4 +1,4 @@
-const {BasketDevice,Device, Brand} = require('../models/models');
+const {BasketDevice,Device, Brand, Type} = require('../models/models');
 const ApiError = require('../error/ApiError');
 
 class BasketDeviceController
@@ -47,7 +47,7 @@ class BasketDeviceController
         let {id} = request.params;
 
         page = page || 1;
-        limit = limit || 9;
+        limit = limit || 5;
         let offset = page * limit - limit;
         let basketDevices;
 
@@ -59,13 +59,31 @@ class BasketDeviceController
                 {
                     userId:id
                 },
-                include : [{all: true, nested: true }]
+                include : [
+                    {
+                      model: Device,
+                      required: true,
+                      include:[
+                        {
+                        model: Brand,
+                        required: true
+                      },
+                      {
+                        model: Type,
+                        required: true
+                      }] 
+                    }                
+                  ]
 
-            }).catch((error) => 
+            }).then((data)=>
+            {
+                return response.json(data);
+
+            }
+            ).catch((error) => 
             {            
                 next(ApiError.internal(error.message));
             });
-        return response.json(basketDevices);
         
     }
 

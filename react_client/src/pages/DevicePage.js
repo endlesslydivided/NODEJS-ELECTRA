@@ -2,7 +2,7 @@ import React, {useEffect, useState,useContext} from 'react';
 import { Context } from "../index";
 import {Button, Card, Col, Container, Image, Row} from "react-bootstrap";
 import {useParams} from 'react-router-dom'
-import {fetchOneDevice,fetchOneBrand,fetchAllRatingsByDevice, createBasketDevice, createRating} from "../http/deviceAPI";
+import {fetchOneDevice,fetchOneBrand,fetchAllRatingsByDevice, createBasketDevice, createRating,fetchBasketDevicesByUser} from "../http/deviceAPI";
 import { Typography } from '@mui/material';
 import ReactStars from "react-rating-stars-component";
 import Star from '@mui/icons-material/Star';
@@ -15,53 +15,77 @@ const DevicePage = observer(() => {
   const [device,setDevice] = useState({info: []});
 
   const [brandName,setBrandName] = useState("");
-  const {rating,user} = useContext(Context);
+  const {rating,user,basketDevice,successResult} = useContext(Context);
   const {id} = useParams();
+  const [ratingAdd,setRatingAdd] = useState(0);
 
-  useEffect(()=>
+  
+  const addToCart = () =>
   {
+    const basketDeviceForm = new FormData();
     
+    basketDeviceForm.append('userId', user.user.id);
+    basketDeviceForm.append('deviceId',id);
+    createBasketDevice(basketDeviceForm);
+    if(user.isAuth && user.user.role !== "ADMIN")
+    {
+        fetchBasketDevicesByUser(basketDevice.page,basketDevice.limit,user.user.id).then((data)=>
+        {
+            basketDevice.setBasketDevices(data.rows);
+            basketDevice.setTotalCount(data.count)
+        })
+    }
+    successResult.setMessage("Товар успешно добавлен в корзину!");
+  }
+
+  const sendRating = (value) =>
+  {
+    const formData = new FormData()
+    formData.append('userId', user.user.id)
+    formData.append('deviceId', id)
+    formData.append('rate', value)
+
+    let ratingEnd = 0;
+
+    createRating(formData).then(()=>
+    {
+      fetchAllRatingsByDevice(id).then(ratings =>
+        {
+          ratings.map((rate) => {ratingEnd +=Number.parseFloat(rate.rate)});
+          ratingEnd = ratingEnd / (ratings.length === 0? 1 : ratings.length);
+          rating.setRate(Number.parseFloat(ratingEnd.toFixed(1)));
+          setRatingAdd(rating.rate);
+
+        });
+    }
+    );
+   
+  }
+
+  
+
+  useEffect(() =>
+  {
     fetchOneDevice(id).then(data => 
       {
         setDevice(data);
         fetchOneBrand(data.brandId).then(dataBrand =>
           setBrandName(dataBrand.name))
 
-          fetchAllRatingsByDevice(id).then(ratings =>
-        {
-          rating.setDeviceId(id);
-          rating.setRate(((ratings.reduce((a, b) => a + b, 0) / ratings.length) || 0).toFixed(1))
-        });
+         
       }
     )
-  },[])
-
-  const addToCart = () =>
-  {
-    const basketDevice = new FormData();
-    
-    basketDevice.append('userId', user.user.id);
-    basketDevice.append('deviceId',id);
-    createBasketDevice(basketDevice);
-    
-  }
-
-  const sendRating = (value) =>
-  {
-
-
-    const formData = new FormData()
-    formData.append('userId', user.user.id)
-    formData.append('deviceId', id)
-    formData.append('rate', value)
-
-
-    createRating(formData);
+    let ratingEnd = 0;
     fetchAllRatingsByDevice(id).then(ratings =>
       {
-        rating.setRate(((ratings.reduce((a, b) => a.rate + b.rate, 0) / ratings.length) || 0).toFixed(1))
+        rating.setDeviceId(id);
+        ratings.map((rate) => { ratingEnd +=Number.parseFloat(rate.rate)});
+        ratingEnd = ratingEnd / (ratings.length === 0? 1 : ratings.length);
+        rating.setRate(Number.parseFloat(ratingEnd.toFixed(1)));
+        setRatingAdd(rating.rate);
       });
-  }
+   
+  },[])
 
   return (
     <Container className="my-4 py-md-2 px-md-4  px-sm-4 
@@ -79,12 +103,13 @@ const DevicePage = observer(() => {
                 {brandName}
 
             </Typography>  
-              <div>{rating.rate}
+              <div className="d-flex flex-row align-items-end" >
+                <h1>{rating.rate}</h1>
               <ReactStars
                           style={{paddingTop:"-40px"}}
                           edit={true}
                           count={5}
-                          value={rating.rate}
+                          value={ratingAdd}
                           size={45}
                           isHalf={true}
                           onChange={(value) => sendRating(value)}
@@ -105,10 +130,10 @@ const DevicePage = observer(() => {
             </Row>
             <Divider/>
             <Row className={"my-3  m-0 d-flex  align-items-baseline"}>
-              <Typography className={"w-25"} style={{fontWeight:"lighter",fontStyle:"italic"}} variant="h5" component="h5">
-                  {device.price} $
+              <Typography className={"w-25 text-center align-self-center  rounded-5"} style={{minHeight:'80px',fontWeight:"lighter",fontStyle:"italic"}} variant="h5" component="h5">
+              $ {device.price} 
               </Typography>
-              <Button variant={"outline-dark"} onClick={() => addToCart()} className={"w-75"}>Добавить в корзину</Button>
+              <Button variant={"outline-dark"} disabled={user.isAuth && user.user.role ==="ADMIN"} onClick={() => addToCart()} className={"w-75"}>Добавить в корзину</Button>
             </Row>
         </Col>
       </Row>

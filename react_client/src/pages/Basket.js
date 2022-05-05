@@ -36,8 +36,10 @@ const Basket = observer(() => {
  
   const getAllBasketDevices = () =>
   {
+    let count = 0;
       fetchAllBasketDeviceByUser(user.user.id).then(data => {
-        setFullCost(data.reduce(function(p,c){return p+c.device.price;},0));
+        data.map((bd) => {count +=Number.parseFloat(bd.device.price)});
+        setFullCost(count);
       })
   }
  
@@ -45,7 +47,7 @@ const Basket = observer(() => {
   return (<Container className="my-4  mx-3 mx-sm-auto glass-light p-3 ">
     <Row className=" align-items-center">
       <Col md={8}   >
-        <BasketTable />
+        <BasketTable tableCallback={setFullCost}/>
       </Col>
       <Col md={4} >
         <Table  className={"p-0 p-sm-0 bg-light border-none   p-md-0"}>

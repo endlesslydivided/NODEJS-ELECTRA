@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useParams } from 'react'
 import { Container,Row,Col } from 'react-bootstrap';
 import {Button} from '@mui/material'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate,useLocation} from 'react-router-dom'
 import {MAIN_ROUTE,LOGIN_ROUTE} from '../utils/consts'
 const ErrorPage = (props) => {
 
     const navigate = useNavigate();
     const [errorString,setErrorString] = useState(`░▄▬`);
+    const location =useLocation();
+    const [isLocation,setIsLocation] = useState((location.state !== null))
+
+    
     const symbols = '☺☻♥•○◙♪☼►◄▬§→∟░▒▓╡┬╚█▄▌▐▀';
     let interval;
     const getRandomInt = (max) => 
@@ -16,6 +20,11 @@ const ErrorPage = (props) => {
 
     useEffect(()=>{
       {
+        if(location.state === null && props.errorCode !== undefined)
+        {
+          location.state = {errorCode: props.errorCode}
+          setIsLocation(true);
+        }
         if(interval != null)
         {   
           clearInterval();
@@ -34,13 +43,12 @@ const ErrorPage = (props) => {
     {
       fontSize: '150px'
     }
-    const { errorCode, errorMessage } = props;
     return (
-    <div className="w-100 container-fluid text-center px-0 d-flex flex-column align-items-center justify-content-center  h-75 ">
+    <div className="w-100 p-5 h-100  my-5 container-fluid text-center px-0 d-flex flex-column align-items-center justify-content-center  h-75 ">
       <Row className=' w-100 px-0'>
-      {errorCode ?
+      {isLocation ?
       <h1 className='display-1 fw-bold' style={codeStyle}>
-        {errorCode}
+        {location.state.errorCode}
       </h1>
       :
       <h1 className='px-0   w-100 text-nowrap' style={codeStyle}>
@@ -53,15 +61,28 @@ const ErrorPage = (props) => {
         
       </Row>
       <Row  className='w-100 my-2 '>
-      <h1>
+      {isLocation ?
+
+      <h1 class="display-5">
           {
-            errorMessage ??
-            'Самая большая ошибка - боязнь совершать ошибки...'            
+            {
+              401 : "Неавторизованный доступ к ресурсу. Зарегистрируйтесь или войдите в свой аккаунт.",
+              404 : "Ресурс не существует либо он был удалён.",
+              403 : "У вас недостаточно прав для доступа к данному ресурсу!"
+
+            }[location.state.errorCode]
           }
       </h1>
+      :
+      <blockquote class="blockquote">
+      <p class="display-5">"Самая большая ошибка - боязнь совершать ошибки..."</p>
+      <footer class="px-5 mx-5  text-end"><em>- Элберт Грин Хаббард</em></footer>
+      </blockquote>
+      }
+      
       </Row>
       <Row  className='my-2 w-25 justify-content-center'>
-          {(!errorCode || errorCode === 404 || errorCode === 403)  ?
+          {(!isLocation || location.state.errorCode === 404 || location.state.errorCode === 403)  ?
             <Button                            
             variant="contained"
             color="secondary"

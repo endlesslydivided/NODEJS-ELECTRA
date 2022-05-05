@@ -7,22 +7,34 @@ import {Context} from "../index";
 import Shop from "../pages/Shop";
 import ErrorPage from '../pages/ErrorPage';
 import Auth from '../pages/Auth';
+import { Box } from '@mui/material';
 
 const AppRouter = observer(() => {
 
   const {user} = useContext(Context);
   return (
-    <Routes>
+    <Box  className="position-relative" style={{zIndex:1}} >
+    <Routes   >
 
       
       {
         user.isAuth && user.user.role === 'ADMIN' && auhtAdminRoutes.map(
           ({path,Component}) =>      
           <Route key={path} path={path} element={<Component/>} exact/>
+          
         )
+        
        
       }
 
+      {
+        user.isAuth && user.user.role === 'ADMIN' && auhtRoutes.map(
+          ({path,Component}) =>      
+          <Route key={path + `${Component}`} path={path} element={<ErrorPage errorCode={403}/>}/>
+          )
+           
+      }
+     
       {
         user.isAuth && user.user.role === 'USER' && auhtRoutes.map(
           ({path,Component}) =>      
@@ -40,22 +52,27 @@ const AppRouter = observer(() => {
       {
         !user.isAuth  && auhtRoutes.map(
           ({path,Component}) =>      
-          <Route key={path} path={path} element={<Auth/>} exact/>
-        ) &&
-        auhtAdminRoutes.map(
-          ({path,Component}) =>      
-          <Route key={path} path={path} element={<ErrorPage errorCode={403} errorMessage={"У вас недостаточно прав для доступа к данному ресурсу!"}/>} exact/>
+          <Route key={path + `${Component}`} path={path} element={<Auth/>} exact/>
         )
       }
 
       {
+         !user.isAuth  && 
+         auhtAdminRoutes.map(
+           ({path,Component}) =>      
+           <Route key={path + `${Component}`} path={path} element={<ErrorPage errorCode={403}/>} exact/>
+         )
+      }
+
+      {
         user.isAuth && user.user.role !== 'ADMIN'  && auhtRoutes.map(
-          ({path}) =>      
-          <Route key={path} path={path} element={<ErrorPage errorCode={403} errorMessage={"У вас недостаточно прав для доступа к данному ресурсу!"}/>} exact/>
+          ({path,Component}) =>      
+          <Route key={path + `${Component}`} path={path} element={<ErrorPage errorCode={403} />} exact/>
         )
       }
-      <Route path="*"  element={<ErrorPage/>} />
+      <Route key={'defaultError'} path="*"  element={<ErrorPage errorCode={404} />} />
     </Routes>
+    </Box>
   )
 });
 
