@@ -42,8 +42,7 @@ const UpdateDevice = observer((props) => {
         formData.append('brandId', device.selectedBrand.id)
         formData.append('typeId', device.selectedType.id)
         formData.append('info', JSON.stringify(device.updateInfo))
-        updateOneDevice(formData,device.updateId).then(data => props.onHide())
-        successResult.setMessage("Товар успешно обновлён")
+        updateOneDevice(formData,device.updateId).then(data => {props.onHide();successResult.setMessage("Товар успешно обновлён")})
 
         }
     }

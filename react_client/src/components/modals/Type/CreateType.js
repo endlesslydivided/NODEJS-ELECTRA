@@ -18,8 +18,9 @@ const CreateType = ({show, onHide}) => {
         createType({name: value}).then(data => {
             setValue('')
             onHide()
-        })
         successResult.setMessage("Тип успешно добавлен")
+
+        })
 
     }
 

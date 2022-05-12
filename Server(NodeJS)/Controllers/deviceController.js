@@ -5,6 +5,7 @@ const path = require('path');
 const {Op,Sequelize,QueryTypes } = require('Sequelize');
 const { sequelize } = require('sequelize/lib/model');
 const {validateDevice} = require("../Utils/validation")
+const {createFile,deleteFile} = require('../Utils/webdav')
 
 class DeviceController
 {
@@ -27,7 +28,8 @@ class DeviceController
 
             }
             let fileName = uuid.v4() + `.jpg`;
-            img.mv(path.resolve(__dirname,'..','Static',fileName));
+            img.name = fileName;
+            createFile(img,next)
             const device = await Device.create({name,price,brandId,typeId,image: fileName}).catch((error) => 
             {            
                 next(ApiError.internal(error.message));
@@ -197,9 +199,24 @@ class DeviceController
         return response.json(device);
     }
 
-    async delete(request,response)
+    async delete(request,response,next)
     {
         const {id} = request.params;
+        
+        const deviceD = await Device.findOne(
+            {
+                where:{id},
+                include : [{model: DeviceInfo,as: 'info'}]
+            }).catch((error) => 
+            {            
+                next(ApiError.internal(error.message));
+            })
+
+        if(deviceD === null)
+        {
+            next(ApiError.notFound("Товар не найден"));
+        }
+        deleteFile(deviceD.image,next)
         const device = await Device.destroy(
             {
                 where:{id}

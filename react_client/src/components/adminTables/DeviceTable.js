@@ -28,7 +28,7 @@ const DeviceTable = observer(() =>
             device.setDevices(data.rows)
             device.setTotalCount(data.count)
         })
-        }, [device.page,])
+        }, [device.page,device.types,device.brands])
 
         const getDevices = () =>
         {

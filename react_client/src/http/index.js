@@ -40,10 +40,7 @@ const AxiosInterceptor = ({ children }) => {
                 {
                     navigate(LOGIN_ROUTE);
                 }
-                else if(error.response.status === 404)
-                {
-                    navigate(ERROR_ROUTE,{state:{errorCode:404}});
-                }
+
                 else if(error.response.status === 403)
                 {
                     navigate(ERROR_ROUTE,{state:{errorCode:403}});

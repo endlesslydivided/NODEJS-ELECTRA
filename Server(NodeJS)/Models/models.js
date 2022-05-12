@@ -234,7 +234,7 @@ Rating.belongsTo(Device)
 Device.hasMany(BasketDevice,{ onDelete: 'cascade',onUpdate: 'cascade' })
 BasketDevice.belongsTo(Device)
 
-Device.hasMany(DeviceInfo, {as: 'info'});
+Device.hasMany(DeviceInfo, {as: 'info',onDelete: 'cascade',onUpdate: 'cascade' });
 DeviceInfo.belongsTo(Device)
 
 

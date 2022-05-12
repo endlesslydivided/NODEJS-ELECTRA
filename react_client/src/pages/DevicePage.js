@@ -59,11 +59,8 @@ const DevicePage = observer(() => {
 
         });
     }
-    );
-   
+    );  
   }
-
-  
 
   useEffect(() =>
   {
@@ -71,9 +68,7 @@ const DevicePage = observer(() => {
       {
         setDevice(data);
         fetchOneBrand(data.brandId).then(dataBrand =>
-          setBrandName(dataBrand.name))
-
-         
+          setBrandName(dataBrand.name))        
       }
     )
     let ratingEnd = 0;
@@ -88,12 +83,14 @@ const DevicePage = observer(() => {
    
   },[])
 
+ 
+
   return (
     <Container className="my-4 py-md-2 px-md-4  px-sm-4 
      bg-light ">
       <Row>
         <Col md={4} style={{minWidth:'200px',minHeight:'500px',}} className={"p-0  d-flex "} >
-          <Image className={"align-self-center justify-self-center mx-auto d-block img-fluid"} src={process.env.REACT_APP_API_URL + device.image}/>
+          <Image className={"align-self-center justify-self-center mx-auto d-block img-fluid"} src={process.env.REACT_APP_API_URL +"static/" + device.image}/>
         </Col>
         <Col className={"d-flex flex-column"}  md={8}>
          
@@ -110,7 +107,7 @@ const DevicePage = observer(() => {
                           style={{paddingTop:"-40px"}}
                           edit={true}
                           count={5}
-                          value={ratingAdd}
+                          value={rating.rate}
                           size={45}
                           isHalf={true}
                           onChange={(value) => sendRating(value)}

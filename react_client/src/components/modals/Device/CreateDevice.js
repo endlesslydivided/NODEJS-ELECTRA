@@ -55,11 +55,10 @@ const CreateDevice = observer(({show, onHide}) => {
                 formData.append('brandId', device.selectedBrand.id)
                 formData.append('typeId', device.selectedType.id)
                 formData.append('info', JSON.stringify(info))
-                createDevice(formData).then(data => onHide())
+                createDevice(formData).then(data => {onHide();successResult.setMessage("Товар успешно добавлен в таблицу");})
                 setInfo([]);setFile(null);setPrice(0);setName('');
                 device.setSelectedBrand({});
                 device.setSelectedType({});
-                successResult.setMessage("Товар успешно добавлен в таблицу")
             }
 
     }

@@ -19,8 +19,9 @@ const CreateBrand = ({show, onHide}) => {
         createBrand({name: value}).then(data => {
             setValue('')
             onHide()
+            successResult.setMessage("Бренд успешно добавлен")
+
         })
-        successResult.setMessage("Бренд успешно добавлен")
     }
 
    
