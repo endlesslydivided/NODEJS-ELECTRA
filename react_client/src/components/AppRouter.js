@@ -1,6 +1,6 @@
 import React, {useContext} from 'react'
 import{Routes,Route,Navigate} from 'react-router-dom'
-import {auhtRoutes,publicRoutes,auhtAdminRoutes} from '../routes'
+import {auhtRoutes,publicRoutes,auhtAdminRoutes, anonymousRoute} from '../routes'
 import {SHOP_ROUTE} from "../utils/consts";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
@@ -14,7 +14,7 @@ const AppRouter = observer(() => {
   const {user} = useContext(Context);
   return (
     <Box  className="position-relative" style={{zIndex:1}} >
-    <Routes   >
+    <Routes>
 
       
       {
@@ -22,9 +22,7 @@ const AppRouter = observer(() => {
           ({path,Component}) =>      
           <Route key={path} path={path} element={<Component/>} exact/>
           
-        )
-        
-       
+        )      
       }
 
       {
@@ -32,7 +30,7 @@ const AppRouter = observer(() => {
           ({path,Component}) =>      
           <Route key={path + `${Component}`} path={path} element={<ErrorPage errorCode={403}/>}/>
           )
-           
+          
       }
      
       {
@@ -70,6 +68,21 @@ const AppRouter = observer(() => {
           <Route key={path + `${Component}`} path={path} element={<ErrorPage errorCode={403} />} exact/>
         )
       }
+
+      {
+        !user.isAuth && anonymousRoute.map(
+          ({path,Component}) =>      
+          <Route key={path + `${Component}`} path={path} element={<Component/>} exact/>
+        )
+      }
+
+      {
+        user.isAuth && anonymousRoute.map(
+          ({path,Component}) =>      
+          <Route key={path + `${Component}`} path={path} element={<Shop/>} exact/>
+        )
+      }
+
       <Route key={'defaultError'} path="*"  element={<ErrorPage errorCode={404} />} />
     </Routes>
     </Box>

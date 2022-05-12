@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
+import {Context} from "../../../index";
 import Modal from "react-bootstrap/Modal";
 import { Form} from "react-bootstrap";
 import {createBrand} from "../../../http/deviceAPI";
@@ -6,12 +7,20 @@ import {Button} from "@mui/material";
 
 const CreateBrand = ({show, onHide}) => {
     const [value, setValue] = useState('')
+    const {errorResult,successResult} = useContext(Context);
 
     const addBrand = () => {
+        if(value === "")
+        {
+        errorResult.setMessage("Заполните поле - бренд")
+        return;
+
+        }
         createBrand({name: value}).then(data => {
             setValue('')
             onHide()
         })
+        successResult.setMessage("Бренд успешно добавлен")
     }
 
    

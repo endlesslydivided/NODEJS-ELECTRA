@@ -222,16 +222,16 @@ User.hasMany(Rating)
 Rating.belongsTo(User)
 
 
-Type.hasMany(Device)
+Type.hasMany(Device,{ onDelete: 'cascade',onUpdate: 'cascade' })
 Device.belongsTo(Type)
 
-Brand.hasMany(Device)
+Brand.hasMany(Device,{ onDelete: 'cascade',onUpdate: 'cascade' })
 Device.belongsTo(Brand)
 
 Device.hasMany(Rating)
 Rating.belongsTo(Device)
 
-Device.hasMany(BasketDevice)
+Device.hasMany(BasketDevice,{ onDelete: 'cascade',onUpdate: 'cascade' })
 BasketDevice.belongsTo(Device)
 
 Device.hasMany(DeviceInfo, {as: 'info'});

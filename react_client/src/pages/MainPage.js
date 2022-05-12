@@ -13,6 +13,7 @@ import {observer} from "mobx-react-lite";
 import LocalAtmTwoToneIcon from '@mui/icons-material/LocalAtmTwoTone';
 import CreditCardTwoToneIcon from '@mui/icons-material/CreditCardTwoTone';
 import {Button} from "@mui/material";
+import { BASKET_ROUTE, INTO_CHAT_ROUTE, SHOP_ROUTE } from '../utils/consts';
 
 
 const MainPage = () => {
@@ -37,7 +38,7 @@ const MainPage = () => {
                         </h2>
                         <div className="px-4 mt-3">
                             <Button
-                            
+                            onClick={() => navigate(BASKET_ROUTE)}
                             variant="outlined"
                             color="secondary"
                             className="rounded-0"
@@ -62,7 +63,7 @@ const MainPage = () => {
                         </h2>
                         <div className="px-4 mt-3">
                             <Button
-                            
+                            onClick={() => navigate(SHOP_ROUTE)}
                             variant="contained"
                             color="secondary"
                             className="rounded-0 neo"
@@ -87,7 +88,7 @@ const MainPage = () => {
                         </h2>
                         <div className="px-4 mt-3">
                             <Button
-                            
+                            onClick={() => navigate(INTO_CHAT_ROUTE)}
                             variant="outlined"
                             color="secondary"
                             className="rounded-0 "

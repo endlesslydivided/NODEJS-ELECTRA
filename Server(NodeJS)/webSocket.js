@@ -2,7 +2,7 @@ const ws = require('ws');
 const {ChatRoom} = require('./models/models');
 
 let rooms = {};
-
+let pingTimer;
 const leave = (room,userId) => 
 {
     if(! rooms[room][userId]) 
@@ -22,7 +22,17 @@ const websocketServer = new ws.Server(
     },
     () => 
     {
-        console.log('WS-server started on 5001')
+
+        // pingTimer = setInterval(() =>
+        // {
+        //     for(let i = 0; i <Object.entries(rooms).length;i++)
+        //     {
+        //         Object.entries(rooms[i]).forEach(([, sock]) => sock.ping);
+
+        //     }
+
+        // },10000);
+        console.log('WS-server started on 5000')
     }
 )
 

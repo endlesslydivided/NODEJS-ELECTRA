@@ -4,6 +4,8 @@ const uuid = require('uuid');
 const path = require('path');
 const {Op,Sequelize,QueryTypes } = require('Sequelize');
 const { sequelize } = require('sequelize/lib/model');
+const {validateDevice} = require("../Utils/validation")
+
 class DeviceController
 {
     async create(request,response,next)
@@ -13,6 +15,17 @@ class DeviceController
             const {name,price,brandId,typeId,info} = request.body;
             const {img} = request.files;
 
+            let validation = validateDevice(typeId,
+                brandId,
+                name,
+                price,
+                img,
+                info);
+            if(validation.status)
+            {
+                return next(ApiError.badRequest(validation.message))
+
+            }
             let fileName = uuid.v4() + `.jpg`;
             img.mv(path.resolve(__dirname,'..','Static',fileName));
             const device = await Device.create({name,price,brandId,typeId,image: fileName}).catch((error) => 
@@ -49,6 +62,17 @@ class DeviceController
             const {name,price,brandId,typeId,info} = request.body;
             const {id} = request.params;
 
+
+            let validation = validateDevice(typeId,
+                brandId,
+                name,
+                price,
+                "",
+                info);
+            if(validation.status)
+            {
+                return next(ApiError.badRequest(validation.message))
+            }
             const device = await Device.update({name,price,brandId,typeId}, 
                 {
                     where: 
@@ -101,6 +125,8 @@ class DeviceController
 
     async getAllList(request,response,next)
     {
+        try
+        {
         let {brandId,typeId,limit,sendRating,page} = request.query;
 
         page = page || 1;
@@ -142,17 +168,17 @@ class DeviceController
         group by (id, name,price,image,"createdAt","updatedAt","typeId",
         "brandId", average)`
         
-        try
-        {
+      
             devices.rows = await Device.sequelize.query(query, { type: QueryTypes.SELECT });
             if(devices.rows.length > 0)
                 devices.count = devices.rows[0].count;
+                return response.json(devices);
+
         }
         catch (error)
         {
             next(ApiError.internal(error.message));
         }
-        return response.json(devices);
     }
 
     async getOne(request,response,next)

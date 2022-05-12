@@ -60,6 +60,11 @@ const  App = observer(() =>
     if(errorResult.message)
     {
       setOpenWarning(true);
+      setTimeout(() =>
+      {
+        setOpenWarning(false);
+
+      },errorResult.message.length / 8 * 1000)
     }
   },[errorResult.message])
 
@@ -68,6 +73,11 @@ const  App = observer(() =>
     if(successResult.message)
     {
       setOpenSuccess(true);
+      setTimeout(() =>
+      {
+        setOpenSuccess(false);
+
+      },successResult.message.length / 8 * 1000)
     }
   },[successResult.message])
   

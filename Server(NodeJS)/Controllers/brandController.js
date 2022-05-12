@@ -6,7 +6,21 @@ class BrandController
     async create(request,response,next)
     {
         const {name} = request.body;
-        const brand = await Brand.create({name}).catch((error) => 
+        
+        if(name === "")
+        {
+            return next(ApiError.badRequest(validation.message))
+        }
+        const brand = await Type.findOne(
+            {
+                where:{name}
+            }
+        )
+        if( brand !== null)
+        {
+            return next(ApiError.badRequest("Такой бренд уже существует"))
+        }
+        brand = await Brand.create({name}).catch((error) => 
         {            
             next(ApiError.internal(error.message));
         });

@@ -63,7 +63,7 @@ const ChatRoomsTable = observer(() =>
                         <td>{chatRoom.userId}</td>
                         <td>{chatRoom.username}</td>
 
-                        <td>{chatRoom.adminId ? chatRoom.adminId : "Ожидает ответа"}</td>
+                        <td>{chatRoom.adminId || (chatRoom.closedAt ? 'Закрыт без ответа' :  "Ожидает ответа")}</td>
                         <td>{chatRoom.createdAt}</td>
 
                         <td>{chatRoom.updatedAt}</td>

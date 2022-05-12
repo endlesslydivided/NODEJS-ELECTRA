@@ -2,7 +2,7 @@ const ApiError = require('../error/ApiError');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {User, Basket} = require('../models/models')
-
+const {validateAuth} = require("../Utils/validation")
 const generateJwt = (id, email, role) => {
     return jwt.sign(
         {id, email, role},
@@ -15,6 +15,11 @@ class UserController {
     async registration(req, res, next) 
     {
         const {email, password, role} = req.body
+        let validation = validateAuth(email,password);
+        if(validation.status)
+        {
+            return next(ApiError.badRequest(validation.message))
+        }
         if (!email || !password)
         {
             return next(ApiError.badRequest('Некорректный email или password'))
@@ -32,14 +37,19 @@ class UserController {
 
     async login(req, res, next) {
         const {email, password} = req.body
+        let validation = validateAuth(email,password);
+        if(validation.status)
+        {
+            return next(ApiError.badRequest(validation.message))
+        }
         const user = await User.findOne({where: {email}})
         if (!user) {
-            return next(ApiError.internal('Пользователь не найден'))
+            return next(ApiError.badRequest('Пользователь не найден'))
         }
         let comparePassword = bcrypt.compareSync(password, user.password)
         if (!comparePassword) 
         {
-            return next(ApiError.internal('Указан неверный пароль'))
+            return next(ApiError.badRequest('Указан неверный пароль'))
         }
         const token = generateJwt(user.id, user.email, user.role)
         return res.json({token})

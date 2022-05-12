@@ -34,8 +34,9 @@ const DevicePage = observer(() => {
             basketDevice.setBasketDevices(data.rows);
             basketDevice.setTotalCount(data.count)
         })
+        successResult.setMessage("Товар успешно добавлен в корзину!");
+
     }
-    successResult.setMessage("Товар успешно добавлен в корзину!");
   }
 
   const sendRating = (value) =>

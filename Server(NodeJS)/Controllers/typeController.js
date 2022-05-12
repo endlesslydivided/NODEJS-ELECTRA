@@ -6,7 +6,23 @@ class TypeController
     async create(request,response,next)
     {
         const {name} = request.body;
-        const type = await Type.create({name}).catch((error) => 
+        
+        if(name === "")
+        {
+            return next(ApiError.badRequest(validation.message))
+        }
+
+        const type = await Type.findOne(
+            {
+                where:{name}
+            }
+        )
+        if( type !== null)
+        {
+            return next(ApiError.badRequest("Такой тип уже существует"))
+        }
+
+        type = await Type.create({name}).catch((error) => 
         {            
             next(ApiError.internal(error.message));
         });

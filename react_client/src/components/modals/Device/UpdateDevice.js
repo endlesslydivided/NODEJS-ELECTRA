@@ -5,9 +5,10 @@ import {Context} from "../../../index";
 import {createDevice, fetchAllBrands, fetchDevices, fetchAllTypes, fetchOneDevice,updateOneDevice} from "../../../http/deviceAPI";
 import {observer} from "mobx-react-lite";
 import {Button} from "@mui/material";
+import { validateDevice } from '../../../utils/validation';
 
 const UpdateDevice = observer((props) => {
-    const {device} = useContext(Context)
+    const {device,errorResult,successResult} = useContext(Context)
 
 
 
@@ -23,6 +24,18 @@ const UpdateDevice = observer((props) => {
 
 
     const updateDevice = () => {
+        let validation = validateDevice(device.selectedType.id,
+            device.selectedBrand.id,
+            device.updateName,
+            device.updatePrice,
+            "",
+            device.updateInfo);
+        if(validation.status)
+        {
+            errorResult.setMessage(validation.message)
+        }
+        else
+        {
         const formData = new FormData()
         formData.append('name', device.updateName)
         formData.append('price', `${device.updatePrice}`)
@@ -30,6 +43,9 @@ const UpdateDevice = observer((props) => {
         formData.append('typeId', device.selectedType.id)
         formData.append('info', JSON.stringify(device.updateInfo))
         updateOneDevice(formData,device.updateId).then(data => props.onHide())
+        successResult.setMessage("Товар успешно обновлён")
+
+        }
     }
 
     return (
@@ -139,7 +155,7 @@ const UpdateDevice = observer((props) => {
             </Modal.Body>
             <Modal.Footer className="justify-content-center">
                 <Button color="error" onClick={props.onHide}>Закрыть</Button>
-                <Button color="success" onClick={updateDevice}>Добавить</Button>
+                <Button color="success" onClick={updateDevice}>Изменить</Button>
             </Modal.Footer>
 
         </Modal>

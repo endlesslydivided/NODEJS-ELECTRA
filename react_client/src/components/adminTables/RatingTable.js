@@ -14,9 +14,6 @@ const RatingTable = observer(() =>
         const {rating} = useContext(Context)
         const {device} = useContext(Context)
 
-
-      
-    
         useEffect(() =>
         {
             fetchRatings(rating.page, rating.limit).then(data => {
@@ -25,7 +22,8 @@ const RatingTable = observer(() =>
         })
         }, [rating.page,])
 
-        const getRatings = () => {
+        const getRatings = () => 
+        {
             fetchRatings(1, rating.limit).then(data => 
                 {
                     rating.setRatings(data.rows)

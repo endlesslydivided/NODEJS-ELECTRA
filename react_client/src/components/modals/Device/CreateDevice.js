@@ -5,10 +5,11 @@ import {Context} from "../../../index";
 import {createDevice, fetchAllBrands, fetchDevices, fetchAllTypes} from "../../../http/deviceAPI";
 import {observer} from "mobx-react-lite";
 import {Button} from "@mui/material";
+import { validateDevice } from '../../../utils/validation';
 
 
 const CreateDevice = observer(({show, onHide}) => {
-    const {device} = useContext(Context)
+    const {device,errorResult,successResult} = useContext(Context)
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
     const [file, setFile] = useState(null)
@@ -33,18 +34,33 @@ const CreateDevice = observer(({show, onHide}) => {
         setFile(e.target.files[0])
     }
 
-    const addDevice = () => {
-        const formData = new FormData()
-        formData.append('name', name)
-        formData.append('price', `${price}`)
-        formData.append('img', file)
-        formData.append('brandId', device.selectedBrand.id)
-        formData.append('typeId', device.selectedType.id)
-        formData.append('info', JSON.stringify(info))
-        createDevice(formData).then(data => onHide())
-        setInfo([]);setFile(null);setPrice(0);setName('');
-        device.setSelectedBrand({});
-        device.setSelectedType({});
+    const addDevice = () => 
+    {
+            let validation = validateDevice(device.selectedType.id,
+                device.selectedBrand.id,
+                name,
+                price,
+                file,
+                info);
+            if(validation.status)
+            {
+                errorResult.setMessage(validation.message)
+            }
+            else
+            {
+                const formData = new FormData()
+                formData.append('name', name)
+                formData.append('price', `${price}`)
+                formData.append('img', file)
+                formData.append('brandId', device.selectedBrand.id)
+                formData.append('typeId', device.selectedType.id)
+                formData.append('info', JSON.stringify(info))
+                createDevice(formData).then(data => onHide())
+                setInfo([]);setFile(null);setPrice(0);setName('');
+                device.setSelectedBrand({});
+                device.setSelectedType({});
+                successResult.setMessage("Товар успешно добавлен в таблицу")
+            }
 
     }
 

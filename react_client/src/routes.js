@@ -49,16 +49,6 @@ export const publicRoutes =
     },
 
     {
-        path : LOGIN_ROUTE,
-        Component: Auth
-    },
-
-    {
-        path : REGISTRATION_ROUTE,
-        Component: Auth
-    },
-
-    {
         path : DEVICE_ROUTE + '/:id',
         Component: DevicePage
     },
@@ -67,4 +57,17 @@ export const publicRoutes =
         Component: ErrorPage
     },
 
+]
+
+export const anonymousRoute =
+[
+    {
+        path : LOGIN_ROUTE,
+        Component: Auth
+    },
+
+    {
+        path : REGISTRATION_ROUTE,
+        Component: Auth
+    }
 ]

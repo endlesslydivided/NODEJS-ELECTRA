@@ -34,20 +34,27 @@ const AxiosInterceptor = ({ children }) => {
 
         const errInterceptor = error => 
         {
-            if (error.response.status === 401) 
+            if(error.response !== undefined)
             {
-                navigate(LOGIN_ROUTE);
+                if (error.response.status === 401) 
+                {
+                    navigate(LOGIN_ROUTE);
+                }
+                else if(error.response.status === 404)
+                {
+                    navigate(ERROR_ROUTE,{state:{errorCode:404}});
+                }
+                else if(error.response.status === 403)
+                {
+                    navigate(ERROR_ROUTE,{state:{errorCode:403}});
+                }
+                errorResult.setMessage(error.response.data.message);
             }
-            else if(error.response.status === 404)
+            else
             {
-                navigate(ERROR_ROUTE,{state:{errorCode:404}});
-            }
-            else if(error.response.status === 403)
-            {
-                navigate(ERROR_ROUTE,{state:{errorCode:403}});
+                errorResult.setMessage("Ошибка на стороне сервера");
             }
 
-            errorResult.setMessage(error.response.data.message);
             return Promise.reject(error);
         }
 
