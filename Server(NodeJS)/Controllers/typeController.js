@@ -17,12 +17,10 @@ class TypeController {
         return next(ApiError.badRequest("Такой тип уже существует"));
       }
 
-      type = await Type.create({ name }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      type = await Type.create({ name })
       return response.json(type);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -35,23 +33,19 @@ class TypeController {
       let offset = page * limit - limit;
       let types;
 
-      types = await Type.findAndCountAll({ limit, offset }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      types = await Type.findAndCountAll({ limit, offset })
       return response.json(types);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
   async getAll(request, response, next) {
     try {
-      const types = await Type.findAll().catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      const types = await Type.findAll();
       return response.json(types);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -60,9 +54,7 @@ class TypeController {
       const { id } = request.params;
       const type = await Type.destroy({
         where: { id },
-      }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      })
 
       return response.json(type);
     } catch (error) {
@@ -71,17 +63,15 @@ class TypeController {
   }
 
   async getOne(request, response, next) {
-    try {
+    try 
+    {
       const { id } = request.params;
       const type = await Type.findOne({
         where: { id },
-      }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
-
+      })
       return response.json(type);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 }

@@ -8,23 +8,19 @@ class BasketDeviceController {
       const basketDevice = await BasketDevice.create({
         userId,
         deviceId,
-      }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      })
       return response.json(basketDevice);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
   async getAll(request, response, next) {
     try {
-      const basketDevices = await BasketDevice.findAll().catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      const basketDevices = await BasketDevice.findAll()
       return response.json(basketDevices);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -40,12 +36,10 @@ class BasketDeviceController {
       basketDevices = await BasketDevice.findAndCountAll({
         limit,
         offset,
-      }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      })
       return response.json(basketDevices);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -82,14 +76,11 @@ class BasketDeviceController {
           },
         ],
       })
-        .then((data) => {
-          return response.json(data);
-        })
-        .catch((error) => {
-          next(ApiError.internal(error.message));
-        });
+        
+        return response.json(basketDevices);
+
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -103,13 +94,11 @@ class BasketDeviceController {
         },
 
         include: [{ model: Device, as: "device" }],
-      }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      })
 
       return response.json(basketDevices);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -118,13 +107,11 @@ class BasketDeviceController {
       const { id } = request.params;
       const basketDevice = await BasketDevice.findOne({
         where: { id },
-      }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      })
 
       return response.json(basketDevice);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -133,13 +120,11 @@ class BasketDeviceController {
       const { id } = request.params;
       const basketDevice = await BasketDevice.destroy({
         where: { id },
-      }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      })
 
       return response.json(basketDevice);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 }

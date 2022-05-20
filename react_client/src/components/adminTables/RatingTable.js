@@ -31,10 +31,8 @@ const RatingTable = observer(() =>
                 }
                 
             )
-            fetchDevices(null, null, 1, device.limit).then(data => {
-                device.setDevices(data.rows)
-                device.setTotalCount(data.count)
-            })
+            rating.setPage(1);
+
         }
 
         return ( 

@@ -9,18 +9,16 @@ class BrandController {
       if (name === "") {
         return next(ApiError.badRequest(validation.message));
       }
-      const brand = await Brand.findOne({
+      let brand = await Brand.findOne({
         where: { name },
       });
       if (brand !== null) {
         return next(ApiError.badRequest("Такой бренд уже существует"));
       }
-      brand = await Brand.create({ name }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      brand = await Brand.create({ name })
       return response.json(brand);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -33,23 +31,19 @@ class BrandController {
       let offset = page * limit - limit;
       let brands;
 
-      brands = await Brand.findAndCountAll({ limit, offset }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      brands = await Brand.findAndCountAll({ limit, offset })
       return response.json(brands);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
   async getAll(request, response, next) {
     try {
-      const brands = await Brand.findAll().catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      const brands = await Brand.findAll();
       return response.json(brands);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -58,13 +52,11 @@ class BrandController {
       const { id } = request.params;
       const brand = await Brand.destroy({
         where: { id },
-      }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      })
 
       return response.json(brand);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -73,13 +65,11 @@ class BrandController {
       const { id } = request.params;
       const brand = await Brand.findOne({
         where: { id },
-      }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      })
 
       return response.json(brand);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 }

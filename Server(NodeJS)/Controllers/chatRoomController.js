@@ -20,14 +20,11 @@ class ChatRoomController
 
             offset: offset,
             limit: limit,
-          }).catch((error) => 
-          {            
-              next(ApiError.internal(error.message));
-          });
+          })
         
         return response.json(chatRooms);
     } catch (error) {
-        next(ApiError.internal("Ошибка на стороне сервера"))
+       return next(ApiError.internal("Ошибка на стороне сервера"))
     } 
         
     }
@@ -40,14 +37,11 @@ class ChatRoomController
             {
                 where:{id}
             }
-        ).catch((error) => 
-        {            
-            next(ApiError.internal(error.message));
-        });
+        )
         
         return response.json(chatRoom);
     } catch (error) {
-        next(ApiError.internal("Ошибка на стороне сервера"))
+        return next(ApiError.internal("Ошибка на стороне сервера"))
     } 
     }
 

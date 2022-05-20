@@ -58,7 +58,10 @@ body
 
     border-radius: 30px;
 }
-
+.dropdown-menu {
+    max-height: 280px;
+    overflow-y: auto;
+}
 
 .glass-light
 {

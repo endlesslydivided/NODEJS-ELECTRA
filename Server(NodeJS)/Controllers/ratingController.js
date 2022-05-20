@@ -30,22 +30,18 @@ class RatingController {
         .then(function (rating) {
           return response.json(rating);
         })
-        .catch((error) => {
-          next(ApiError.internal(error.message));
-        });
+        
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
   async getAll(request, response, next) {
     try {
-      const ratings = await Rating.findAll().catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      const ratings = await Rating.findAll()
       return response.json(ratings);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -56,12 +52,10 @@ class RatingController {
       const ratings = await Rating.findAll({
         where: { deviceId },
         include: [{ model: Device, as: "device" }],
-      }).catch((error) => {
-        next(ApiError.internal(error.message));
-      });
+      })
       return response.json(ratings);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -77,7 +71,7 @@ class RatingController {
       ratings = await Rating.findAndCountAll({ limit, offset });
       return response.json(ratings);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -90,7 +84,7 @@ class RatingController {
 
       return response.json(rating);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 
@@ -103,7 +97,7 @@ class RatingController {
 
       return response.json(rating);
     } catch (error) {
-      next(ApiError.internal("Ошибка на стороне сервера"));
+      return next(ApiError.internal("Ошибка на стороне сервера"));
     }
   }
 }

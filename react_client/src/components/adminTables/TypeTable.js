@@ -37,6 +37,8 @@ const TypeTable = observer(() =>
                 }
             )
             fetchAllTypes().then(data => device.setTypes(data))
+            type.setPage(1);
+
         }
 
         return ( 
@@ -94,7 +96,7 @@ const TypeTable = observer(() =>
                     totalCount={type.totalCount}
                     limit={type.limit}
                     pageO={type.page}
-                    updateData ={(value) => type.setPage(value)}
+                    updateData ={(event,value) => type.setPage(value)}
                 />
 
                 </td>

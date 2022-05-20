@@ -16,11 +16,6 @@ let options = {
 };
 
 const {createClient} = require('webdav');
-const client = createClient(
-    process.env.REMOTE_URL, {
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD
-});
 const {getFile} = require('./Utils/webdav')
 
 let server;
@@ -39,7 +34,7 @@ const start = async() =>
     try
     {
       server=   https.createServer(options, app).listen(PORT,
-                () => console.log(`Server started on port ${PORT}(https://localhost:${PORT})`))
+                () => console.log(`Server started on port ${PORT}(http://localhost:${PORT}, https://electra:${PORT})`))
                 webSocket(server);     
     }
     catch(e)

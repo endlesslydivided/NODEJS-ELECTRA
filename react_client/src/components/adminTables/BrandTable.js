@@ -36,7 +36,9 @@ const BrandTable = observer(() =>
                 }
                 
             )
-            fetchAllBrands().then(data => device.setBrands(data))
+            fetchAllBrands().then(data => device.setBrands(data));
+            brand.setPage(1);
+
         }
 
         return ( 

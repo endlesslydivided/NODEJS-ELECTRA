@@ -63,7 +63,7 @@ const  App = observer(() =>
       setTimeout(() =>
       {
         setOpenWarning(false);
-
+        errorResult.setMessage(null);
       },errorResult.message.length / 8 * 1000)
     }
   },[errorResult.message])
@@ -76,6 +76,7 @@ const  App = observer(() =>
       setTimeout(() =>
       {
         setOpenSuccess(false);
+        successResult.setMessage(null);
 
       },successResult.message.length / 8 * 1000)
     }

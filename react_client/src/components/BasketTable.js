@@ -83,7 +83,7 @@ const BasketTable = observer(({tableCallback}) =>
                         </Button>
                         </td>
                         <td className="col-2 ">
-                            <Image className="text-center w-100 h-100  "  src={process.env.REACT_APP_API_URL + basketDeviceItem.device.image}/>
+                            <Image className="text-center w-100 h-100  "  src={process.env.REACT_APP_API_URL +"static/" +basketDeviceItem.device.image}/>
                         </td>
                         <td className="col-9">
                             <h4 className={"m-1"}>{basketDeviceItem.device.price}$</h4>

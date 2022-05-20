@@ -29,9 +29,9 @@ const BasketDeviceTable = observer(() =>
                 {
                     basketDevice.setBasketDevices(data.rows)
                     basketDevice.setTotalCount(data.count)
-                }
-                
+                }                
             )
+            basketDevice.setPage(1);
 
         }
 

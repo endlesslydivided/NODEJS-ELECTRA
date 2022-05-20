@@ -12,6 +12,7 @@ import { Divider } from '@mui/material';
 import {Container} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import { Context } from '..';
+import Skeleton from '@mui/material/Skeleton';
 
 const DeviceItem = ({device}) => {
   const navigate = useNavigate ();
@@ -49,7 +50,8 @@ const DeviceItem = ({device}) => {
       <Col md={3} xs={6} className={"mt-3"} >
 
         <Card className="shadow-sm h-100" style={{borderRadius:'17px'}} border={"light "}>
-            <Card.Img variant="top" className="mt-2" style={{cursor:'pointer',borderRadius:'17px'}}  src={process.env.REACT_APP_API_URL+"static/" + device.image}/>
+            <Card.Img variant="top" className="mt-2" style={{cursor:'pointer',borderRadius:'17px'}}   src={process.env.REACT_APP_API_URL+"static/" + device.image}/>
+
             <Divider/>
 
             <Card.Title className="text-center mt-1">{device.name}</Card.Title>

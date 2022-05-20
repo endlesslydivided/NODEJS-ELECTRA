@@ -36,6 +36,8 @@ const DeviceTable = observer(() =>
                 device.setDevices(data.rows)
                 device.setTotalCount(data.count)
             })
+            device.setPage(1);
+
         }
 
         const setDeviceUpdate = (id) =>
@@ -125,7 +127,7 @@ const DeviceTable = observer(() =>
                     totalCount={device.totalCount}
                     limit={device.limit}
                     pageO={device.page}
-                    updateData ={(value) => device.setPage(value)}
+                    updateData ={(event,value) => device.setPage(value)}
                 />
 
                 </td>

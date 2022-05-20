@@ -30,11 +30,7 @@ class DeviceController
             let fileName = uuid.v4() + `.jpg`;
             img.name = fileName;
             createFile(img,next)
-            const device = await Device.create({name,price,brandId,typeId,image: fileName}).catch((error) => 
-            {            
-                next(ApiError.internal(error.message));
-            });
-
+            const device = await Device.create({name,price,brandId,typeId,image: fileName})
 
             if(info)
             {
@@ -53,7 +49,7 @@ class DeviceController
         }
         catch(error)
         {
-            next(ApiError.badRequest(error.message));
+            return next(ApiError.badRequest(error.message));
         }
     }
 
@@ -121,7 +117,7 @@ class DeviceController
         }
         catch(error)
         {
-            next(ApiError.internal(error.message));
+            return next(ApiError.internal(error.message));
         }
     }
 
@@ -174,59 +170,63 @@ class DeviceController
             devices.rows = await Device.sequelize.query(query, { type: QueryTypes.SELECT });
             if(devices.rows.length > 0)
                 devices.count = devices.rows[0].count;
-                return response.json(devices);
+            return response.json(devices);
 
         }
         catch (error)
         {
-            next(ApiError.internal(error.message));
+            return  next(ApiError.internal(error.message));
         }
     }
 
     async getOne(request,response,next)
     {
+        try{
         const {id} = request.params;
         const device = await Device.findOne(
             {
                 where:{id},
                 include : [{model: DeviceInfo,as: 'info'}]
             }
-        ).catch((error) => 
-        {            
-            next(ApiError.internal(error.message));
-        })
+        )
         
         return response.json(device);
+        }
+        catch (error)
+        {
+            return  next(ApiError.internal(error.message));
+        }
     }
 
     async delete(request,response,next)
     {
+        try
+        {
         const {id} = request.params;
         
         const deviceD = await Device.findOne(
             {
                 where:{id},
                 include : [{model: DeviceInfo,as: 'info'}]
-            }).catch((error) => 
-            {            
-                next(ApiError.internal(error.message));
             })
 
         if(deviceD === null)
         {
-            next(ApiError.notFound("Товар не найден"));
+            return next(ApiError.notFound("Товар не найден"));
         }
         deleteFile(deviceD.image,next)
         const device = await Device.destroy(
             {
                 where:{id}
             }
-        ).catch((error) => 
-        {            
-            next(ApiError.internal(error.message));
-        })
+        )
         
         return response.json(device);
+        }
+        catch (error)
+        {
+            return  next(ApiError.internal(error.message));
+        }
     }
 }
 
